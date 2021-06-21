@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JoshCoin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/transaction',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="You are regestered,You can login now.") {
+                    console.log("wooo");
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+    $(document).ready(function(){
+$(":input").inputmask();
+
+
+
+$("#phone").inputmask({
+mask: '999 999 9999',
+placeholder: ' ',
+showMaskOnHover: false,
+showMaskOnFocus: false,
+onBeforePaste: function (pastedValue, opts) {
+var processedValue = pastedValue;
+
+//do something with it
+
+return processedValue;
+}
+});
+});
+btn.addEventListener('click', function(){
+    socket.emit('chat',{
+        message: message.value,
+        handle: handle.value
+    });
+});
+  </script>
+  <style>
+  body{
+    height: 100%;
+    font-family: ;/*courier garamond candara*/
+  }
+  .fa {
+  padding: 20px;
+  font-size: 24px;
+  width: ;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+  color: black;
+}
+.alignleft {
+    float: left;
+    margin-right: 15px;
+}
+.alignright {
+    float: right;
+    margin-left: 15px;
+}
+.aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+}
+a:focus { outline: 0 solid }
+img {
+    max-width: 100%;
+    height: auto;
+}
+.fix { overflow: hidden }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+html,
+body { height: 100% }
+
+a {
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    color: #333;
+}
+a:hover { text-decoration: none }
+
+
+
+.search-box{margin:80px auto;position:absolute;}
+.caption{margin-bottom:50px;}
+.loginForm input[type=text], .loginForm input[type=password]{
+  margin-bottom:10px;
+}
+.loginForm input[type=submit]{
+  background:#fb044a;
+  color:#fff;
+  font-weight:700;
+
+}
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin-bottom: 0%;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+/*
+body {
+    padding: 2.5em 2em 0em;
+    background: #f5f7f9;
+        font-size: 1.5em;
+        color: #346;
+        font-family: Signika, -apple-system, sans-serif;
+}*/
+  </style>
+</head>
+<body class="bg-light">
+  <%- header %>
+<!--
+    <div class="nav-scroller bg-white box-shadow">
+      <nav class="nav nav-underline">
+        <a class="nav-link active" href="#">Dashboard</a>
+        <a class="nav-link" href="#">
+          Friends
+          <span class="badge badge-pill bg-light align-text-bottom">27</span>
+        </a>
+        <a class="nav-link" href="#">Explore</a>
+        <a class="nav-link" href="#">Suggestions</a>
+        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">Link</a>
+      </nav>
+    </div>
+-->
+    <main role="main" class="container" style="width: 100%">
+      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+        <h1 class="mr-3" style="color: white">OC</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+        <div class="lh-100">
+          <h6 class="mb-0 text-white lh-100">Email Blocks</h6>
+          <small>Since 2020</small>
+        </div>
+      </div>
+      <% if (typeof blocks !== 'undefined' && blocks.length > 0) { %>
+      <div class="my-3 p-3 shadow-sm p-3 mb-5 bg-white rounded">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Recent transactions</h6>
+        <div class="media text-muted pt-3">
+          <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+          <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="container">
+            <div class="row border-bottom border-gray">
+              <div class="col-sm-8">
+            <h6 class=" pb-2 mb-0">Hash</h6>
+          </div>
+          <div class="col-sm-2">
+            <h6 class="pb-2 mb-0">Time</h6>
+      </div>
+      <div class="col-sm-2">
+            <h6 class="pb-2 mb-0">Value</h6>
+  </div>
+</div>
+</div>
+          </p>
+        </div>
+        <% for(var i=0; i < blocks.length; i++) { %>
+          <% for(var j=0; j < blocks[i].data.transaction_Pool.length; j++) { %>
+        <div class="media text-muted pt-3">
+          <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+          <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="container">
+            <div class="row border-bottom border-gray">
+              <div class="col-sm-8">
+            <span class="d-block text-gray-dark"><%= blocks[i].data.transaction_Pool[j].input.txid %></span>
+          </div>
+          <div class="col-sm-2">
+<% var date = new Date(blocks[i].data.transaction_Pool[j].lock_time * 1000); %>
+
+<% var hours = date.getHours(); %>
+
+<% var minutes = "0" + date.getMinutes(); %>
+
+<% var seconds = "0" + date.getSeconds(); %>
+
+<% var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2); %>
+        <%= formattedTime %>
+      </div>
+      <div class="col-sm-2">
+      <%  if(blocks[i].data.transaction_Pool[j].output.amount == 0){ %>
+        <span class="text-secondary" style="color: ;">spent</span>
+      <% } else{ %>
+    <span style="color: green;"><%= blocks[i].data.transaction_Pool[j].output.amount.toFixed(4) %> ODC</span>
+    <% } %>
+  </div>
+</div>
+</div>
+          </p>
+        </div>
+        <% } %>
+      <% } %>
+        <small class="d-block text-right mt-3">
+          <a href="#">All updates</a>
+        </small>
+      </div>
+
+      <div class="my-3 p-3 shadow-sm p-3 mb-5 bg-white rounded" style="margin-bottom: 5%;">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Suggestions</h6>
+        <% for(var i=0; i < blocks.length; i++) { %>
+        <div class="media text-muted pt-3">
+          <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <strong class="text-gray-dark">Block: <%= blocks[i].index %></strong>
+              <a href="#">Follow</a>
+            </div>
+            <span class="d-block">@<%= blocks[i].hash %></span>
+          </div>
+        </div>
+      <% } %>
+        <small class="d-block text-right mt-3">
+          <a href="#">All suggestions</a>
+        </small>
+      </div>
+    </main>
+		<% } else { %>
+
+      <% } %>
+
+<!--
+      <footer class="text-muted bg-white shadow-lg  rounded">
+          <div class="container">
+            <p class="float-right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+              <small class="d-block mb-3 text-muted">&copy; 2019-2020</small>
+            </p>
+            <p style="font-family: Snell Roundhand, cursive; color: white"> OC</p>
+          </div>
+          <div class="col-sm-12 bg-secondary" style="">
+          </div>
+        </footer>
+-->
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+        <script src="../../../../assets/js/vendor/popper.min.js"></script>
+        <script src="../../../../dist/js/bootstrap.min.js"></script>
+        <script src="../../../../assets/js/vendor/holder.min.js"></script>
+        <script>
+          // Example starter JavaScript for disabling form submissions if there are invalid fields
+          (function() {
+            'use strict';
+
+            window.addEventListener('load', function() {
+              // Fetch all the forms we want to apply custom Bootstrap validation styles to
+              var forms = document.getElementsByClassName('needs-validation');
+
+              // Loop over them and prevent submission
+              var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                  if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  }
+                  form.classList.add('was-validated');
+                }, false);
+              });
+            }, false);
+          })();
+        </script>
+      </body>
+    </html>

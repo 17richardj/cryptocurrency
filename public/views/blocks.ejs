@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JoshCoin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/transaction',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="You are regestered,You can login now.") {
+                    console.log("wooo");
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+    $(document).ready(function(){
+$(":input").inputmask();
+
+
+
+$("#phone").inputmask({
+mask: '999 999 9999',
+placeholder: ' ',
+showMaskOnHover: false,
+showMaskOnFocus: false,
+onBeforePaste: function (pastedValue, opts) {
+var processedValue = pastedValue;
+
+//do something with it
+
+return processedValue;
+}
+});
+});
+btn.addEventListener('click', function(){
+    socket.emit('chat',{
+        message: message.value,
+        handle: handle.value
+    });
+});
+  </script>
+  <style>
+  body{
+    height: 100%;
+    font-family: ;/*courier garamond candara*/
+  }
+  .fa {
+  padding: 20px;
+  font-size: 24px;
+  width: ;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+  color: black;
+}
+.alignleft {
+    float: left;
+    margin-right: 15px;
+}
+.alignright {
+    float: right;
+    margin-left: 15px;
+}
+.aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+}
+a:focus { outline: 0 solid }
+img {
+    max-width: 100%;
+    height: auto;
+}
+.fix { overflow: hidden }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+html,
+body { height: 100% }
+
+a {
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    color: #333;
+}
+a:hover { text-decoration: none }
+
+
+
+.search-box{margin:80px auto;position:absolute;}
+.caption{margin-bottom:50px;}
+.loginForm input[type=text], .loginForm input[type=password]{
+  margin-bottom:10px;
+}
+.loginForm input[type=submit]{
+  background:#fb044a;
+  color:#fff;
+  font-weight:700;
+
+}
+
+/*
+body {
+    padding: 2.5em 2em 0em;
+    background: #f5f7f9;
+        font-size: 1.5em;
+        color: #346;
+        font-family: Signika, -apple-system, sans-serif;
+}*/
+  </style>
+</head>
+<body class="bg-light">
+        <%- header %>
+
+    <main role="main" class="container" style="width: 100%">
+      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+        <h1 class="mr-3" style="color: white">OC</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+        <div class="lh-100">
+          <h6 class="mb-0 text-white lh-100">OodleCoin</h6>
+          <small>Since 2020</small>
+        </div>
+      </div>
+      <% if (typeof blocks !== 'undefined' && blocks.length > 0) { %>
+<div class="row">
+  <div class="col-md-12">
+      <div class="my-3 p-3 bg-white shadow-sm p-3 mb-5 rounded">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Blocks</h6>
+        <% for(var i=0; i < blocks.length; i++) { %>
+        <div class="media text-muted pt-3">
+          <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <strong class="text-gray-dark">Block: <%= blocks[i].index %></strong>
+              <a href="#">Follow</a>
+            </div>
+            <span class="d-block">@<%= blocks[i].hash %></span>
+          </div>
+        </div>
+      <% } %>
+        <small class="d-block text-right mt-3">
+          <a href="#">All suggestions</a>
+        </small>
+      </div>
+    </div>
+    </div>
+    </main>
+		<% } else { %>
+
+      <% } %>
+      <!-- Graphs -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+          <script>
+
+// chart colors
+var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
+/* 3 donut charts */
+var donutOptions = {
+  cutoutPercentage: 85,
+  legend: {position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
+};
+
+          // donut 3
+          var chDonutData3 = {
+              labels: ['Angular', 'React', 'Other'],
+              datasets: [
+                {
+                  backgroundColor: colors.slice(0,3),
+                  borderWidth: 0,
+                  data: [21, 45, 55, 33]
+                }
+              ]
+          };
+          var chDonut3 = document.getElementById("chDonut3");
+          if (chDonut3) {
+            new Chart(chDonut3, {
+                type: 'pie',
+                data: chDonutData3,
+                options: donutOptions
+            });
+          }
+          </script>
+      </body>
+    </html>

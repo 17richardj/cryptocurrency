@@ -1,0 +1,7028 @@
+[
+    {
+        "addr" : "85.213.199.39:8333",
+        "services" : "00000001",
+        "lastsend" : 1405634126,
+        "lastrecv" : 1405634127,
+        "bytessent" : 23487651,
+        "bytesrecv" : 138679099,
+        "conntime" : 1405021768,
+        "pingtime" : 0.00000000,
+        "version" : 70002,
+        "subver" : "/Satoshi:0.9.2.1/",
+        "inbound" : false,
+        "startingheight" : 310131,
+        "banscore" : 0,
+        "syncnode" : true
+    },
+    {
+        "addr" : "58.23.244.20:8333",
+        "services" : "00000001",
+        "lastsend" : 1405634127,
+        "lastrecv" : 1405634124,
+        "bytessent" : 4460918,
+        "bytesrecv" : 8903575,
+        "conntime" : 1405559628,
+        "pingtime" : 0.00000000,
+        "version" : 70001,
+        "subver" : "/Satoshi:0.8.6/",
+        "inbound" : false,
+        "startingheight" : 311074,
+        "banscore" : 0,
+        "syncnode" : false
+    }
+]
+
+Decrease memory requirements of shared buffer by x amount
+
+7 layer onion, tcp at layer 4
+
+
+https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch08.html
+
+
+
+
+Table 8-3. The structure of the block header
+Size	Field	Description
+4 bytes
+
+Version
+
+A version number to track software/protocol upgrades
+
+32 bytes
+
+Previous Block Hash
+
+A reference to the hash of the previous (parent) block in the chain
+
+32 bytes
+
+Merkle Root
+
+A hash of the root of the merkle tree of this block’s transactions
+
+4 bytes
+
+Timestamp
+
+The approximate creation time of this block (seconds from Unix Epoch)
+
+4 bytes
+
+Difficulty Target
+
+The proof-of-work algorithm difficulty target for this block
+
+4 bytes
+
+Nonce
+
+A counter used for the proof-of-work algorithm
+
+
+scripting language used is stateless and turing incomplete
+
+
+
+this.version = process.env.TOKEN_VERSION;
+this.input_Counter = 0;
+this.input = function(txid, index, script){
+  this.input = {
+    txid : sender,
+    index : index,
+    unlock_script_size : 0,
+    script : script,
+    sequence_number : 0xffffffff
+  }
+};
+this.output_Counter = 0;
+this.output = function(amount, script){
+  this.output = {
+    amount : amount,
+    lock_script_size : 0,
+    script : script
+  }
+};
+this.lock_time = lock_time;
+}
+
+
+
+
+
+// convert an integer into a buffer of a single byte
+
+static numberToInt8(n) {
+
+    return new Buffer([n]);
+
+};
+
+
+// convert an integer into a buffer of 4 bytes using
+
+// Little-Endian convention
+
+static numberToInt32LE(n) {
+
+    var buffer = new Buffer(4);
+
+    buffer.writeUInt32LE(n,0);
+
+    return buffer;
+
+};
+
+
+serializeTransaction(transaction) {
+
+    var buffers = [];
+
+    buffers.push (numberToInt32LE(transaction.version));
+
+    buffers.push (numberToInt32LE(transaction.input_Counter));
+
+    buffers.push (new Buffer.from(transaction.timestamp));
+
+    buffers.push (new Buffer(transaction.data.sender));
+
+    buffers.push (new Buffer(transaction.data.recipient));
+
+    buffers.push (new Buffer(transaction.data.amount));
+
+    buffers.push (new Buffer(transaction.precedingHash, 'hex'));
+
+    buffers.push (new Buffer(transaction.hash, 'hex'));
+
+    buffers.push (numberToInt32LE(transaction.nonce));
+
+    return Buffer.concat(buffers);
+
+};
+
+
+
+we dont use reverse hex look up
+
+
+
+
+var previousTransaction = {
+
+    version: 1,
+
+    inputs: {}, // missing actual data here
+
+    outputs: [
+
+        {}, // missing output[0]
+
+        {
+
+            amount: 0.09212969,
+
+            script: [
+
+                OP_DUP,
+
+                OP_HASH160,
+
+                '4586dd621917a93058ee904db1b7a43bfc05910a',
+
+                OP_EQUALVERIFY,
+
+                OP_CHECKSIG
+
+            ]
+
+        }
+
+    ],
+
+    lockTime: 0
+
+};
+
+
+var transaction = {
+
+   version: 1,
+
+   inputs: [
+
+        {
+
+            txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+            index: 1,
+
+
+            script: [
+
+                  "3045"
+
+                + "0221"
+
+                + "009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f29905"
+
+                + "0220"
+
+                + "6b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab2945" // signature
+
+                +  SIGHASH_ALL,    // hashtype
+
+                "0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e" // Public Key
+
+            ]
+
+        },
+
+        {
+
+            txid: "5b7aeedc2e82c9646408ce0588d9f98d2107062e9291af0e9e6fa372b0d7d1fb",
+
+            index: 1,
+
+
+            script: [
+
+                  "3045"
+
+                + "0220"
+
+                + "35a9e444883acaaae166d2ee1389272424ec7885f4210aaf118fee58b5683445"
+
+                + "0221"
+
+                + "00e40624a0df47943aa5ee63d8997dd36c5da44409ccc4dafcbfabc96a020d971c" // signature
+
+                + SIGHASH_ALL,   // hashtype
+
+
+                "033b18e24fb031dae396297516a54f3e46cc9902adfd1b8edea0d6a01dab0e027d" // Public Key
+
+            ]
+
+        }
+
+   ],
+
+   outputs: [
+
+        {
+
+            amount: 0.05580569,
+
+            script: [
+
+                    OP_DUP,
+
+                    OP_HASH160,
+
+                    '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                    OP_EQUALVERIFY,
+
+                    OP_CHECKSIG
+
+            ],
+
+        },
+
+        {
+
+            amount: 0.1,
+
+            script: [
+
+                    OP_DUP,
+
+                    OP_HASH160,
+
+                    '81a9e7d0ab008005d36c61563a178ad20a3a5224',
+
+                    OP_EQUALVERIFY,
+
+                    OP_CHECKSIG
+
+            ],
+
+        }
+
+   ],
+
+   lockTime: 0
+
+};
+
+
+
+
+
+
+
+    return Buffer.concat(buffers);
+
+};
+
+
+var serializeInputs = function (inputs) {
+
+    var buffers = [];
+
+
+    var inputsSize = inputs.length;
+
+    buffers.push(numberToInt8(inputsSize));
+
+
+    for (var i = 0; i < inputsSize; i++) {
+
+        var input = inputs[i];
+
+
+        buffers.push(hexaNotationToInt256LE(input.txid));
+
+        buffers.push(numberToInt32LE(input.index));
+        JSON.stringify(input.script);
+        buffers.push(compileScript(input.script));
+
+        buffers.push(numberToInt32LE(0xffffffff));
+
+    }
+
+    return Buffer.concat (buffers);
+
+};
+
+
+var serializeOutputs = function (outputs) {
+
+    var buffers = [];
+
+
+    var outputsSize = outputs.length;
+
+    buffers.push(numberToInt8(outputsSize));
+
+    for (var i = 0; i < outputsSize; i++) {
+
+        var output = outputs[i];
+
+        buffers.push(serializeAmount(output.amount));
+
+        buffers.push(compileScript(output.script));
+
+    }
+
+    return Buffer.concat (buffers);
+
+};
+
+
+var compileScript = function(program) {
+
+    var buffers = [];
+
+    var bytes = 0;
+
+    for (var i = 0, len = program.length; i < len; i++) {
+
+        var code = program[i];
+
+        var type = typeof(code);
+
+        switch (type) {
+
+            case 'number':
+
+                buffers.push(numberToInt8(code));
+
+                bytes++;
+
+                break;
+
+            case 'string':
+
+                var operand = new Buffer(code, 'hex');
+
+                buffers.push(numberToInt8(operand.length));
+
+                buffers.push(operand);
+
+                bytes += operand.length + 1
+
+                break;
+
+        }
+
+    }
+
+    buffers.unshift(numberToInt8(bytes));
+
+    return Buffer.concat(buffers);
+
+};
+
+
+// A simple virtual machine to run a decoded P2SH (Pay to Script Hash) scripts
+
+
+
+
+var runScript = function (program, stack, currentTransaction, currentInputIndex) {
+
+    var operand;
+
+    var operand1;
+
+    var operand2;
+
+    var ip = 0; // instruction pointer
+
+    var last = program[ip++];
+
+    while (ip <= last) {
+
+        var instruction = program[ip++];
+
+        switch (instruction) {
+
+            case OP_DUP:
+
+                operand = stack.pop();
+                //console.log(operand.toString('hex'));
+                stack.push(operand);
+                //console.log(operand);
+                stack.push(operand);
+
+                break;
+
+
+             case OP_ADD:
+
+                operand1 = stack.pop().readInt32LE();
+
+                operand2 = stack.pop().readInt32LE();
+
+                stack.push(numberToInt32LE(operand1 + operand2));
+
+                break;
+
+
+            case  OP_HASH160:
+
+                operand = stack.pop();
+                //console.log(ripemd160(sha256(operand)).toString('hex'));
+                stack.push(ripemd160(sha256(operand)));
+
+                break;
+
+
+            case  OP_EQUALVERIFY:
+
+                operand1 = stack.pop();
+
+                operand2 = stack.pop();
+                //console.log(operand1.toString('hex'));
+                //console.log(operand2.toString('hex'));
+
+                if (! operand1.compare(operand2) == 0) return false;
+
+                break;
+
+
+            case  OP_CHECKSIG:
+
+                operand1 = stack.pop();
+
+                operand2 = stack.pop();
+
+
+                // operand 1 is Public Key
+
+                var publicKey = operand1;
+
+                // operand 2 contains hashType
+
+                var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+
+                // operand 2 contains DER Signature
+
+                var signatureDER = operand2.slice(0,-1);
+                //console.log(signatureDER.toString('hex'));
+
+                var signature = secp256k1.signatureImport(signatureDER); // Decode a signature in DER format
+                signature = new Buffer(signature, 'uint8');
+
+
+                // recover signed transaction and hash of this transaction
+
+                var copy = copyForSignature(currentTransaction, currentInputIndex, hashType);
+//console.log(JSON.stringify(copy)+ " fasfdfasdf");
+//console.log(" Copy " + JSON.stringify(copy));
+                console.log(signatureDER.toString('hex'));
+                var buffer = serializeTransaction(copy);
+
+                var hashcode = sha256 (sha256 (buffer));
+
+                // Check signature
+                console.log("Pub Key " + publicKey.toString('hex'));
+                //console.log("run " + ecdsa.verify(hashcode, signatureDER, publicKey));
+                if (! ecdsa.verify(hashcode, signatureDER, publicKey)) return false;
+
+                break;
+            case OP_HALT:
+                ip = last;
+                break;
+
+            default:
+
+                var size = instruction;
+
+                var data  = new Buffer(size);
+
+                program.copy(data, 0, ip, size+ip);
+
+                stack.push(data);
+
+                ip += size;
+
+                break;
+
+        }
+
+    }
+
+    return true;
+
+};
+
+var SIGHASH_ALL          = "01";
+
+var SIGHASH_NONE         = "02";
+
+var SIGHASH_SINGLE       = "03";
+
+var SIGHASH_ANYONECANPAY = "80";
+
+
+// We create a previous transaction with an output
+
+// We skip other data that are not required for validation
+
+var m="hello";
+
+var EC = require('elliptic').ec;
+
+var ec = new EC('secp256k1');
+
+var crypto = require('crypto') //Node.js or Browserify (browser)
+
+
+var privateKey = "fa00607319702ef9dcca60109e010d7ec0e5a6b091f06b5ed174ab03e59d4240"
+const newUser = new user();
+
+var msg = new Buffer.from("hello world!", 'utf8')
+var shaMsg = crypto.createHash('sha256').update(msg).digest()
+var signature = ec.sign(shaMsg, new Buffer.from(privateKey, 'hex'));
+var isValid = ec.verify(shaMsg, signature, new Buffer.from("0252efbfc0517e8ba2a2e66c2534ec33135168d6f6bc93325e0b16434a14d35778", 'hex'));
+console.log(isValid) //true
+
+
+
+var previousTransaction = {
+
+    version: 1,
+
+    inputs: {}, // missing actual data here
+
+    outputs: [
+
+        {}, // missing output[0]
+
+        {
+
+            amount: 0.09212969,
+
+            script: [
+
+                OP_DUP,
+
+                OP_HASH160,
+
+                '4586dd621917a93058ee904db1b7a43bfc05910a',
+
+                OP_EQUALVERIFY,
+
+                OP_CHECKSIG
+
+            ]
+
+        }
+
+    ],
+
+    lockTime: 0
+
+};
+
+
+var transaction = {
+
+   version: 1,
+
+   inputs: [
+
+        {
+
+            txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+            index: 1,
+
+
+            script: [
+
+                  "3045"
+
+                + "0221"
+
+                + "009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f29905"
+
+                + "0220"
+
+                + "6b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab2945" // signature
+
+                +  SIGHASH_ALL,    // hashtype
+
+                "0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e" // Public Key
+
+            ]
+
+        }
+
+   ],
+
+   outputs: [
+
+        {
+
+            amount: 0.05580569,
+
+            script: [
+
+                    OP_DUP,
+
+                    OP_HASH160,
+
+                    '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                    OP_EQUALVERIFY,
+
+                    OP_CHECKSIG
+
+            ],
+
+        }
+
+   ],
+
+   lockTime: 0
+
+};
+
+
+
+var dbtx = {};
+
+dbtx["14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9"] = previousTransaction;
+
+dbtx["9e9f1efee35b84bf71a4b741c19e1acc6a003f51ef8a7302a3dcd428b99791e4"] = transaction;
+
+
+var copyForSignature = function(transaction, inputIndex, hashType) {
+
+    var copy = Object.assign({}, transaction);
+
+
+    var inputs = copy.inputs;
+
+    for (var i = 0, len = inputs.length; i < len; i++) {
+
+        inputs[i].script = []; // reset script to nothing
+
+    }
+
+
+    var currentInput = inputs[inputIndex];
+
+
+    var previousTransaction =  dbtx[currentInput.txid];
+
+    var previousOutput =previousTransaction.outputs[currentInput.index];
+
+
+    currentInput.script = previousOutput.script;
+
+
+    copy.hashType = hashType;
+
+    return copy;
+
+};
+
+
+var validateInput = function (transaction, inputIndex) {
+
+    var stack = [];
+
+
+    var input = transaction.inputs[inputIndex];
+    //console.log(transaction.inputs[inputIndex]);
+    var previousTransaction =  dbtx[input.txid];
+    //console.log(dbtx[input.txid]);
+    var previousOutput =previousTransaction.outputs[input.index];
+    //console.log(previousOutput);
+    //console.log(input.script);
+    var program1 = compileScript(input.script);
+
+    var program2 = compileScript(previousOutput.script);
+
+
+    var result = runScript (program1, stack, transaction, inputIndex);
+    //console.log(stack);
+    if (result) result = runScript (program2, stack, transaction, inputIndex);
+    console.log("Result " + result);
+
+    return result;
+
+};
+
+[ '4143685854756868308570272908222302318397684704736859227669183675966876832940610887670050313371960957311117319926832442050873031016165040545260819958042721101',
+  '0252efbfc0517e8ba2a2e66c2534ec33135168d6f6bc93325e0b16434a14d35778' ]
+
+
+
+
+
+
+  const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
+    namedCurve: 'sect239k1',
+    publicKeyEncoding:  { type: 'spki', format: 'pem' },
+    privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+  });
+  var pub = Buffer.from(publicKey, 'base64');
+  pub = pub.toString('hex');
+  var holds = pub;
+  console.log("Pub key" +pub+ " End");
+  pub = ripemd160(sha256(pub));
+  console.log(pub.toString('hex'));j
+  const sign = crypto.createSign('SHA256')
+  sign.write('some data to sign')
+  sign.end()
+  const signature = sign.sign(privateKey, 'hex')
+  //console.log(signature);
+  const verify = crypto.createVerify('SHA256')
+  verify.write('some data to sign')
+  verify.end()
+  console.log("verify " + verify.verify(publicKey, signature, 'hex'))
+  // Prints: true or false
+
+
+
+
+
+
+  var ellipticcurve = require("starkbank-ecdsa");
+  var Ecdsa = ellipticcurve.Ecdsa;
+  var PrivateKey = ellipticcurve.PrivateKey;
+
+  // Generate privateKey from PEM string
+  var privateKey = PrivateKey.fromPem("-----BEGIN EC PARAMETERS-----\nBgUrgQQACg==\n-----END EC PARAMETERS-----\n-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEIODvZuS34wFbt0X53+P5EnSj6tMjfVK01dD1dgDH02RzoAcGBSuBBAAK\noUQDQgAE/nvHu/SQQaos9TUljQsUuKI15Zr5SabPrbwtbfT/408rkVVzq8vAisbB\nRmpeRREXj5aog/Mq8RrdYy75W9q/Ig==\n-----END EC PRIVATE KEY-----\n");
+
+  // Create message from json
+  let message = JSON.stringify({
+      "transfers": [
+          {
+              "amount": 100000000,
+              "taxId": "594.739.480-42",
+              "name": "Daenerys Targaryen Stormborn",
+              "bankCode": "341",
+              "branchCode": "2201",
+              "accountNumber": "76543-8",
+              "tags": ["daenerys", "targaryen", "transfer-1-external-id"]
+          }
+      ]
+  });
+
+  signature = Ecdsa.sign(message, privateKey);
+
+  // Generate Signature in base64. This result can be sent to Stark Bank in header as Digital-Signature parameter
+  console.log(signature.toBase64());
+
+  // To double check if message matches the signature
+   console.log(privateKey);
+  let publicKey = privateKey.publicKey();
+  console.log("pub key" + publicKey.toString('hex'));
+  //publicKey = Buffer.from(publicKey, 'base64');
+  console.log(publicKey.toString('hex'));
+  console.log(Ecdsa.verify(message, signature, publicKey));
+
+
+
+
+
+
+
+
+  const newUser = new user();
+
+  var privateKey = newUser.privateKey;
+  var publicKey = newUser.publicKey;
+
+  var data = "hey";
+
+  var hashcode = sha256 (sha256 (new Buffer.from(data)));
+  var signature = ecdsa.sign(hashcode, privateKey);//.signature;
+  var signatureDER = signature.toDER();
+  //console.log(signatureDER);
+  signatureDER = new Uint8Array(signatureDER);
+  signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+  //console.log(signatureDER);
+  console.log(ecdsa.verify(hashcode, signature, publicKey));
+  console.log("yo");
+
+
+
+
+
+
+
+
+  var crypto = require('crypto');
+  var EC = require('elliptic').ec;
+  var secp256k1 = require('secp256k1');
+  var ecdsa = new EC('secp256k1');
+  var format = require('ecdsa-sig-formatter');
+
+  let user = require('../models/User')
+
+  var sha256 = function(buffer) {
+
+      var f = crypto.createHash("SHA256");
+
+      var h = f.update(buffer);
+
+      return h.digest();
+
+  };
+
+
+  var ripemd160 = function(buffer) {
+
+      var f = crypto.createHash("RIPEMD160");
+
+      var h = f.update(buffer);
+
+      return h.digest();
+
+  };
+
+
+
+  Buffer.prototype.toReverseHexaNotation = function () {
+
+      var hexa = "";
+
+      for (var i = this.length-1; i >= 0; i--) {
+
+         var digits =  this[i].toString(16);
+
+          hexa += ("0" + digits).slice(-2); // Add "0" for single digit
+
+      }
+
+      return hexa;
+
+  };
+
+
+  var numberToInt8 = function (n) {
+
+      return new Buffer([n]);
+
+  };
+
+
+  var numberToInt32LE = function (n) {
+
+      var buffer = new Buffer(4);
+
+      buffer.writeUInt32LE(n,0);
+
+      return buffer;
+
+  };
+
+
+  var numberToInt64LE = function (n) {
+
+     var buffer = new Buffer(8);
+
+     buffer.writeUInt32LE(n % 0xFFFFFFFFFFFFFFFF, 0);
+
+     buffer.writeUInt32LE(Math.floor(n / 0xFFFFFFFFFFFFFFFF), 4);
+
+     return buffer;
+
+  };
+
+
+  var serializeAmount = function (amount) {
+
+      return numberToInt64LE(amount * 100000000);
+
+  };
+
+
+  var hexaNotationToInt256LE = function (hexa) {
+
+      var bytes = new Array(32);
+
+      for (var i = 0, j = 31, len = hexa.length; i < len; i+=2, j--) {
+
+          bytes[j] = parseInt(hexa[i]+hexa[i+1],16);
+
+      }
+
+      return new Buffer(bytes);
+
+  };
+
+
+
+  var      OP_ADD         = 0x93;
+
+  var      OP_DUP         = 0x76;
+
+  var      OP_HASH160     = 0xa9;
+
+  var      OP_EQUALVERIFY = 0x88;
+
+  var      OP_CHECKSIG    = 0xac;
+
+  var      OP_HALT        = 0x94;
+
+  console.log(OP_ADD + "  " + OP_DUP + " " + OP_HASH160 + " " + OP_EQUALVERIFY + " " + OP_CHECKSIG + " " + OP_HALT);
+
+
+
+  var serializeTransaction = function(tr) {
+
+      var buffers = [];
+
+      buffers.push(numberToInt32LE(tr.version));
+
+      buffers.push(serializeInputs(tr.inputs));
+
+      buffers.push(serializeOutputs(tr.outputs));
+
+      buffers.push(numberToInt32LE(tr.lockTime));
+
+      if (tr.hashType)
+
+          buffers.push(numberToInt32LE(Number(tr.hashType)));
+
+      return Buffer.concat(buffers);
+
+  };
+
+
+  var serializeInputs = function (inputs) {
+
+      var buffers = [];
+
+
+      var inputsSize = inputs.length;
+
+      buffers.push(numberToInt8(inputsSize));
+
+
+      for (var i = 0; i < inputsSize; i++) {
+
+          var input = inputs[i];
+
+
+          buffers.push(hexaNotationToInt256LE(input.txid));
+
+          buffers.push(numberToInt32LE(input.index));
+          JSON.stringify(input.script);
+          buffers.push(compileScript(input.script));
+
+          buffers.push(numberToInt32LE(0xffffffff));
+
+      }
+
+      return Buffer.concat (buffers);
+
+  };
+
+
+  var serializeOutputs = function (outputs) {
+
+      var buffers = [];
+
+
+      var outputsSize = outputs.length;
+
+      buffers.push(numberToInt8(outputsSize));
+
+      for (var i = 0; i < outputsSize; i++) {
+
+          var output = outputs[i];
+
+          buffers.push(serializeAmount(output.amount));
+
+          buffers.push(compileScript(output.script));
+
+      }
+
+      return Buffer.concat (buffers);
+
+  };
+
+
+  var compileScript = function(program) {
+
+      var buffers = [];
+
+      var bytes = 0;
+
+      for (var i = 0, len = program.length; i < len; i++) {
+
+          var code = program[i];
+
+          var type = typeof(code);
+
+          switch (type) {
+
+              case 'number':
+
+                  buffers.push(numberToInt8(code));
+
+                  bytes++;
+
+                  break;
+
+              case 'string':
+
+                  var operand = new Buffer(code, 'hex');
+
+                  buffers.push(numberToInt8(operand.length));
+
+                  buffers.push(operand);
+
+                  bytes += operand.length + 1
+
+                  break;
+
+          }
+
+      }
+
+      buffers.unshift(numberToInt8(bytes));
+
+      return Buffer.concat(buffers);
+
+  };
+
+
+  // A simple virtual machine to run a decoded P2SH (Pay to Script Hash) scripts
+
+
+
+
+  var runScript = function (program, stack, currentTransaction, currentInputIndex) {
+
+      var operand;
+
+      var operand1;
+
+      var operand2;
+
+      var ip = 0; // instruction pointer
+
+      var last = program[ip++];
+
+      while (ip <= last) {
+
+          var instruction = program[ip++];
+
+          switch (instruction) {
+
+              case OP_DUP:
+
+                  operand = stack.pop();
+                  //console.log(operand.toString('hex'));
+                  stack.push(operand);
+                  //console.log(operand);
+                  stack.push(operand);
+
+                  break;
+
+
+               case OP_ADD:
+
+                  operand1 = stack.pop().readInt32LE();
+
+                  operand2 = stack.pop().readInt32LE();
+
+                  stack.push(numberToInt32LE(operand1 + operand2));
+
+                  break;
+
+
+              case  OP_HASH160:
+
+                  operand = stack.pop();
+                  //console.log(ripemd160(sha256(operand)).toString('hex'));
+                  stack.push(ripemd160(sha256(operand)));
+
+                  break;
+
+
+              case  OP_EQUALVERIFY:
+
+                  operand1 = stack.pop();
+
+                  operand2 = stack.pop();
+                  //console.log(operand1.toString('hex'));
+                  //console.log(operand2.toString('hex'));
+
+                  if (! operand1.compare(operand2) == 0) return false;
+
+                  break;
+
+
+              case  OP_CHECKSIG:
+
+                  operand1 = stack.pop();
+
+                  operand2 = stack.pop();
+
+
+                  // operand 1 is Public Key
+
+                  var publicKey = operand1;
+
+                  // operand 2 contains hashType
+                  //console.log(operand2.toString('hex'));
+                  var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+                  // operand 2 contains DER Signature
+
+                  var signatureDER = operand2.slice(0,-1);
+                  //console.log(signatureDER);
+                  //console.log(signatureDER.toString('hex'));
+
+                  var signature = secp256k1.signatureImport(signatureDER); // Decode a signature in DER format
+                  signature = new Buffer(signature, 'uint8');
+
+
+                  // recover signed transaction and hash of this transaction
+
+                  var copy = copyForSignature(currentTransaction, currentInputIndex, hashType);
+  //console.log(JSON.stringify(copy)+ " fasfdfasdf");
+  //console.log(" Copy " + JSON.stringify(copy));
+                  //console.log(signatureDER.toString('hex'));
+                  var buffer = serializeTransaction(copy);
+
+                  var hashcode = sha256 (sha256 (buffer));
+
+                  // Check signature
+                  //console.log("run " + ecdsa.verify(hashcode, signatureDER, publicKey));
+                  if (! ecdsa.verify(hashcode, signatureDER, publicKey)) return false;
+
+                  break;
+              case OP_HALT:
+                  ip = last;
+                  break;
+
+              default:
+
+                  var size = instruction;
+
+                  var data  = new Buffer(size);
+
+                  program.copy(data, 0, ip, size+ip);
+
+                  stack.push(data);
+
+                  ip += size;
+
+                  break;
+
+          }
+
+      }
+
+      return true;
+
+  };
+
+  var SIGHASH_ALL          = "01";
+
+  var SIGHASH_NONE         = "02";
+
+  var SIGHASH_SINGLE       = "03";
+
+  var SIGHASH_ANYONECANPAY = "80";
+
+
+  // We create a previous transaction with an output
+
+  // We skip other data that are not required for validation
+
+  const newUser = new user();
+
+  var privateKey = newUser.privateKey;
+  var publicKey = newUser.publicKey;
+
+  var data = "hey";
+
+  var hashcode = sha256 (sha256 (new Buffer.from(data)));
+  var signature = ecdsa.sign(hashcode, privateKey);//.signature;
+  var signatureDER = signature.toDER();
+  //console.log(signatureDER);
+  signatureDER = new Uint8Array(signatureDER);
+  signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+  //console.log(signatureDER);
+  console.log(ecdsa.verify(hashcode, signature, publicKey));
+  console.log("yo");
+
+
+  var previousTransaction = {
+
+      version: 1,
+
+      inputs: {}, // missing actual data here
+
+      outputs: [
+
+          {}, // missing output[0]
+
+          {
+
+              amount: 0.09212969,
+
+              script: [
+
+                  OP_DUP,
+
+                  OP_HASH160,
+
+                  '4586dd621917a93058ee904db1b7a43bfc05910a',
+
+                  OP_EQUALVERIFY,
+
+                  OP_CHECKSIG
+
+              ]
+
+          }
+
+      ],
+
+      lockTime: 0
+
+  };
+
+
+  var transaction = {
+
+     version: 1,
+
+     inputs: [
+
+          {
+
+              txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+              index: 1,
+
+
+              script: [
+
+                    "3045"
+
+                  + "0221"
+
+                  + "009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f29905"
+
+                  + "0220"
+
+                  + "6b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab2945" // signature
+
+                  +  SIGHASH_ALL,    // hashtype
+
+                  "0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e" // Public Key
+
+              ]
+
+          }
+
+     ],
+
+     outputs: [
+
+          {
+
+              amount: 0.05580569,
+
+              script: [
+
+                      OP_DUP,
+
+                      OP_HASH160,
+
+                      '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                      OP_EQUALVERIFY,
+
+                      OP_CHECKSIG
+
+              ],
+
+          }
+
+     ],
+
+     lockTime: 0
+
+  };
+
+
+
+  var dbtx = {};
+
+  dbtx["14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9"] = previousTransaction;
+
+  dbtx["9e9f1efee35b84bf71a4b741c19e1acc6a003f51ef8a7302a3dcd428b99791e4"] = transaction;
+
+
+
+  var copyForSignature = function(transaction, inputIndex, hashType) {
+
+      var copy = transaction;
+
+      copy.hashType = 1;
+
+      return copy;
+
+  };
+
+
+  var validateInput = function (transaction, inputIndex) {
+
+      var stack = [];
+
+
+      var input = transaction.inputs[inputIndex];
+      //console.log(transaction.inputs[inputIndex]);
+      var previousTransaction =  dbtx[input.txid];
+      //console.log(dbtx[input.txid]);
+      var previousOutput =previousTransaction.outputs[input.index];
+      //console.log(previousOutput);
+      //console.log(input.script);
+      var program1 = compileScript(input.script);
+
+      var program2 = compileScript(previousOutput.script);
+
+
+      var result = runScript (program1, stack, transaction, inputIndex);
+      //console.log(stack);
+      if (result) result = runScript (program2, stack, transaction, inputIndex);
+      //console.log("Result " + result);
+
+      return result;
+
+  };
+
+
+  var currentTransaction = transaction;
+
+  var currentInputIndex  = 0;
+
+  if(validateInput(currentTransaction, currentInputIndex)){
+    console.log("success");
+  }
+
+  var y = [
+
+          OP_DUP,
+
+          OP_HASH160,
+
+          '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+          OP_EQUALVERIFY,
+
+          OP_CHECKSIG
+
+  ];
+
+  var x = [
+
+          OP_DUP,
+
+          OP_HASH160,
+
+          '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+          OP_EQUALVERIFY,
+
+          OP_CHECKSIG
+
+  ];
+
+
+  jake = "0252efbfc0517e8ba2a2e66c2534ec33135168d6f6bc93325e0b16434a14d35778";
+  var val = ripemd160(sha256(jake));
+  //console.log("fuck jake ; " + val.toString('hex'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  var previousTransaction = {
+
+      version: 1,
+
+      inputs: {}, // missing actual data here
+
+      outputs: [
+
+          {}, // missing output[0]
+
+          {
+
+              amount: 0.09212969,
+
+              script: [
+
+                  OP_DUP,
+
+                  OP_HASH160,
+
+                  '4586dd621917a93058ee904db1b7a43bfc05910a',
+
+                  OP_EQUALVERIFY,
+
+                  OP_CHECKSIG
+
+              ]
+
+          }
+
+      ],
+
+      lockTime: 0
+
+  };
+
+
+  var transaction = {
+
+     version: 1,
+
+     inputs: [
+
+          {
+
+              txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+              index: 1,
+
+
+              script: [
+
+                    signature,    // hashtype
+
+
+                  "0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e",//+ SIGHASH_ALL, // Public Key
+
+              ]
+
+          },
+
+          {
+
+              txid: "5b7aeedc2e82c9646408ce0588d9f98d2107062e9291af0e9e6fa372b0d7d1fb",
+
+              index: 1,
+
+
+              script: [
+
+                    "3045"
+
+                  + "0220"
+
+                  + "35a9e444883acaaae166d2ee1389272424ec7885f4210aaf118fee58b5683445"
+
+                  + "0221"
+
+                  + "00e40624a0df47943aa5ee63d8997dd36c5da44409ccc4dafcbfabc96a020d971c" // signature
+
+                  + SIGHASH_ALL,   // hashtype
+
+
+                  "033b18e24fb031dae396297516a54f3e46cc9902adfd1b8edea0d6a01dab0e027d" // Public Key
+
+              ]
+
+          }
+
+     ],
+
+     outputs: [
+
+          {
+
+              amount: 0.05580569,
+
+              script: [
+
+                      OP_DUP,
+
+                      OP_HASH160,
+
+                      '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                      OP_EQUALVERIFY,
+
+                      OP_CHECKSIG
+
+              ],
+
+          },
+
+          {
+
+              amount: 0.1,
+
+              script: [
+
+                      OP_DUP,
+
+                      OP_HASH160,
+
+                      '81a9e7d0ab008005d36c61563a178ad20a3a5224',
+
+                      OP_EQUALVERIFY,
+
+                      OP_CHECKSIG
+
+              ],
+
+          }
+
+     ],
+
+     lockTime: 0
+
+  };
+
+
+
+
+
+
+
+
+
+
+  //
+  //https://gist.github.com/sid24rane/2b10b8f4b2f814bd0851d861d3515a10
+  //
+
+  const chalk = require('chalk');
+  var net = require('net');
+  var stream = require('stream');
+  const secureRandom = require('secure-random');
+  var EC = require('elliptic').ec;
+  const sha256 = require('js-sha256');
+  const ripemd160 = require('ripemd160');
+  const bs58 = require('bs58')
+  var crypto = require('crypto');
+  var secp256k1 = require('secp256k1');
+  var ecdsa = new EC('secp256k1');
+
+
+  require('dotenv').config();
+
+  // Create SocketIO instance, connect
+
+  var client = require("socket.io-client");
+  var socket = client.connect("http://localhost:3000");
+  socket.emit("test", "foo");
+
+      // Add a connect listener
+      socket.on('connect',function() {
+        console.log('Client has connected to the server!');
+      });
+      // Add a connect listener
+      socket.on('message',function(data) {
+        console.log('Received a message from the server!',data);
+      });
+      // Add a disconnect listener
+      socket.on('disconnect',function() {
+        console.log('The client has disconnected!');
+      });
+
+      // Sends a message to the server via sockets
+      function sendMessageToServer(message) {
+        socket.send(message);
+      };
+
+
+  // Create and initialize EC context
+  // (better do it once and reuse it)
+  var ecdsa = new EC('secp256k1');
+
+  let blChain= require('./models/blockchain')
+  let blck = require('./models/block')
+  let user = require('./models/User')
+  let wallet = require('./models/Wallet')
+  let transaction = require('./models/Transaction')
+
+  let interpreter = require('./virtual_machine/interpreter')
+
+  let blockChain = new blChain;
+  const newUser = new user();
+
+  const POOL_REQ = process.env.POOL_REQ;
+  const DNS_PORT = process.env.DNS_PORT;
+
+  //POOL of all current transactions before block processing, stored in ram
+  var transaction_Pool = [POOL_REQ];
+
+
+  var count = 0;
+  var flag = false;
+
+  //*************************************************************************************************************************************
+  // BEGIN CLIENT SIDE TCP CONNECTION TO DNS
+  //*************************************************************************************************************************************
+
+  var server = net.createServer();
+
+  var client = net.connect(1234, 'localhost', function() {
+    console.log(chalk.green("NODE SUCCESSFULLY CONNECTED TO DNS"));
+  });
+  client.on('error', function(ex) {
+    //console.log(chalk.red("NODE FAILED TO CONNECT TO DNS"));
+    //console.log(ex);
+  });
+
+  client.on('data', (data) => {
+    console.log(data.toString());
+    client.end();
+  });
+  client.on('close', function() {
+         console.log('connection got closed, will try to reconnect');
+           client.end();
+         });
+  client.on('end' , function(){
+        console.log('Requested an end to the TCP connection');
+         });
+
+  //emitted when server closes ...not emitted until all connections closes.
+  server.on('close',function(){
+    console.log('Server closed !');
+  });
+
+  //*************************************************************************************************************************************
+  // END CLIENT SIDE TCP CONNECTION TO DNS
+  //*************************************************************************************************************************************
+
+  // emitted when new client connects
+  server.on('connection',function(socket){
+
+  //this property shows the number of characters currently buffered to be written. (Number of characters is approximately equal to the number of bytes to be written, but the buffer may contain strings, and the strings are lazily encoded, so the exact number of bytes is not known.)
+  //Users who experience large or growing bufferSize should attempt to "throttle" the data flows in their program with pause() and resume().
+
+    console.log('Buffer size : ' + socket.bufferSize);
+
+    console.log('---------server details -----------------');
+
+    var address = server.address();
+    var port = address.port;
+    var family = address.family;
+    var ipaddr = address.address;
+    console.log('Server is listening at port' + port);
+    console.log('Server ip :' + ipaddr);
+    console.log('Server is IP4/IP6 : ' + family);
+
+    var lport = socket.localPort;
+    var laddr = socket.localAddress;
+    console.log('Server is listening at LOCAL port ' + lport);
+    console.log('Server LOCAL ip : ' + laddr);
+
+    console.log('------------remote client info --------------');
+
+    var rport = socket.remotePort;
+    var raddr = socket.remoteAddress;
+    var rfamily = socket.remoteFamily;
+
+    console.log('REMOTE Socket is listening at port ' + rport);
+    console.log('REMOTE Socket ip : ' + raddr);
+    console.log('REMOTE Socket is IP4/IP6 : ' + rfamily);
+
+    console.log('--------------------------------------------')
+  //var no_of_connections =  server.getConnections(); // sychronous version
+  server.getConnections(function(error,count){
+    console.log('Number of concurrent connections to the server : ' + count);
+  });
+
+  socket.setEncoding('utf8');
+
+  socket.setTimeout(800000,function(){
+    // called after timeout -> same as socket.on('timeout')
+    // it just tells that soket timed out => its ur job to end or destroy the socket.
+    // socket.end() vs socket.destroy() => end allows us to send final data and allows some i/o activity to finish before destroying the socket
+    // whereas destroy kills the socket immediately irrespective of whether any i/o operation is goin on or not...force destry takes place
+    console.log('Socket timed out');
+    socket.end()
+  });
+
+  var chain = {};
+
+  if(blockChain.blockchain.length != 0){
+    try{
+
+      //socket.write(JSON.stringify(blockChain.blockchain));
+
+    }catch (e){
+
+      console.log(e);
+
+    }
+  }
+
+
+  var index = 1;
+
+
+
+  var sha256 = function(buffer) {
+
+      var f = crypto.createHash("SHA256");
+
+      var h = f.update(buffer);
+
+      return h.digest();
+
+  };
+
+
+  var ripemd160 = function(buffer) {
+
+      var f = crypto.createHash("RIPEMD160");
+
+      var h = f.update(buffer);
+
+      return h.digest();
+
+  };
+
+  function check_TransactionSum(publicKey, privateKey){
+    var total = [];
+    UTXO = {
+
+    };
+
+    var counter = 0;
+    console.log(blockChain.blockchain);
+    try{
+      console.log(publicKey.toString('hex'));
+    var hash = ripemd160(sha256(publicKey)).toString('hex');
+    console.log("hash " + hash);
+    for(var j = 0; j < blockChain.blockchain.length; j++){
+      for(var k = 0; k < blockChain.blockchain[j].length; k++){
+        if(blockChain.blockchain[j].transaction_Pool[k].output.script[2] == hash){
+          UTXO = {
+            block : j,
+            index : k,
+            amount : blockChain.blockchain[j].transaction_Pool[k].output.amount
+          };
+          total[count] = UTXO;
+        }
+      }
+      //if(blockChain.blockChain[i].data)
+    }
+
+    var newWallet = new wallet(publicKey, privateKey);
+    newWallet.walletAmount()
+
+  }catch (e){
+    console.log("SERVER ERROR :: " + e);
+  }
+  }
+
+
+  //prepare transaction for delivery
+  function _packageTransaction(client_Data, count){
+    var new_Transaction = {};//new transaction(Date.now(), count);
+    new_Transaction.output(client_Data.amount, );
+
+    console.log(new_Transaction);
+
+    return new_Transaction;
+  }
+
+  //emit packaged transaction to nodes
+  function emit_Transaction(new_Transaction){
+
+    clients.write(JSON.stringify(new_Transaction));
+
+  }
+
+
+
+
+  socket.on('data',function(client_Data){
+    var bread = socket.bytesRead;
+    var bwrite = socket.bytesWritten;
+    console.log('Bytes read : ' + bread);
+    console.log('Bytes written : ' + bwrite);
+    console.log('Data sent to server : ' + client_Data);
+
+    if(count == POOL_REQ){
+      count = 0;
+      for(var i = 0; i < POOL_REQ; i++){
+
+        if(blockChain.addNewBlock(new blck(index++, { transaction_Pool }))){
+          console.log(newUser.coin + "  " + blockChain.blockchain[i].coin.amount);
+          newUser.coin += blockChain.blockchain[i].coin.amount;
+          blockChain.blockchain[i].coin.amount = 0;
+        }
+      }
+
+      flag = true;
+
+    }else{
+      var user_input = JSON.parse(client_Data);
+
+      _packageTransaction(client_Data, count);
+
+      transaction_Pool[count] = transaction;
+      if(blockChain.blockchain.length > 1){
+        check_TransactionSum(client_Data.pub_key, client_Data.priv_key);
+      }
+      console.log("First transaction: " + transaction_Pool[count]);
+      count++;
+    }
+
+    if(flag){
+      try{
+        for(var i = 0; i < blockChain.blockchain.length; i++){
+          console.log(chalk.green("\nBlock :: " + i + " " + JSON.stringify(blockChain.blockchain[i]) + "\n"));
+        }
+
+        console.log("Nodes Earned Coin :: " + newUser.coin);
+        socket.write(JSON.stringify(blockChain.blockchain));
+
+      }catch (exception){
+        console.log(exception);
+      }
+
+      //echo data
+      var is_kernel_buffer_full=true ;//= socket.write('Node : ' + server.address().port + ' successfully added Block :: ' + JSON.stringify(blockChain, null, 4));
+      if(is_kernel_buffer_full){
+        console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
+        flag = false;
+      }else{
+        socket.pause();
+      }
+  }
+  });
+
+  socket.on('rand',function(data){
+    console.log("new data: " + data)
+  });
+
+  socket.on('drain',function(){
+    console.log('write buffer is empty now .. u can resume the writable stream');
+    socket.resume();
+  });
+
+  socket.on('error',function(error){
+    console.log('Error : ' + error);
+  });
+
+  socket.on('timeout',function(){
+    console.log('Socket timed out !');
+    socket.end('Timed out!');
+    // can call socket.destroy() here too.
+  });
+
+  socket.on('end',function(data){
+    console.log('Socket ended from other end!');
+    console.log('End data : ' + data);
+  });
+
+  socket.on('close',function(error){
+    var bread = socket.bytesRead;
+    var bwrite = socket.bytesWritten;
+    console.log('Bytes read : ' + bread);
+    console.log('Bytes written : ' + bwrite);
+    console.log('Socket closed!');
+    if(error){
+      console.log('Socket was closed coz of transmission error');
+    }
+  });
+
+  setTimeout(function(){
+    var isdestroyed = socket.destroyed;
+    console.log('Socket destroyed:' + isdestroyed);
+    socket.destroy();
+  },1200000);
+
+  });
+
+
+  //
+  //END CONNECT
+  //
+
+
+
+
+  // emits when any error occurs -> calls closed event immediately after this.
+  server.on('error',function(error){
+    console.log('Error: ' + error);
+  });
+
+  //emits when server is bound with server.listen
+  server.on('listening',function(){
+    console.log('Port :: ' + server.address().port);
+  });
+
+  server.maxConnections = 10;
+
+  //static port allocation
+  server.listen(2222);
+
+  // for dyanmic port allocation
+  //server.listen(function(){
+    //var address = server.address();
+    //var port = address.port;
+    //var family = address.family;
+    //var ipaddr = address.address;
+    //console.log('Server is listening at port' + port);
+    //console.log('Server ip :' + ipaddr);
+    //console.log(ipaddr);
+    //console.log('Server is IP4/IP6 : ' + family);
+  //});
+
+
+
+  var islistening = server.listening;
+
+  if(islistening){
+    console.log(chalk.green('Server STATUS :: Listening'));
+  }else{
+    console.log(chalk.red('Server STATUS :: Not Listening'));
+  }
+
+  setTimeout(function(){
+    server.close();
+  },5000000);
+
+
+
+  //---------------------client----------------------
+
+  // creating a custom socket client and connecting it....
+  //var client  = new net.Socket();
+  //client.connect({
+    //port:2222
+  //});
+
+  //client.on('connect',function(){
+    //console.log('Client: connection established with server');
+
+    //console.log('---------client details -----------------');
+    //var address = client.address();
+    //var port = address.port;
+    //var family = address.family;
+    //var ipaddr = address.address;
+    //console.log('Client is listening at port ' + port);
+    //console.log('Client ip : ' + ipaddr);
+    //console.log('Client is IP4/IP6 : ' + family);
+
+
+    // writing data to server
+    //client.write('hello from client');
+
+  //});
+
+  //client.setEncoding('utf8');
+
+  //client.on('data',function(data){
+    //console.log('Data from server: ' + data);
+  //});
+
+  //setTimeout(function(){
+    //client.end('Bye bye server');
+  //},5000);
+
+  //NOTE:--> all the events of the socket are applicable here..in client...
+
+
+  // -----------------creating client using net.connect instead of custom socket-------
+
+  // server creation using net.connect --->
+  // u can also => write the below code in seperate js file
+  // open new node instance => and run it...
+
+
+
+
+
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>JoshCoin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+    <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/buys',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="Success!") {
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+  </script>
+  <style>
+    body{
+      height: 100%;
+      font-family: ;/*courier garamond candara*/
+    }
+    .fa {
+    padding: 20px;
+    font-size: 24px;
+    width: ;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    color: black;
+  }
+  .alignleft {
+      float: left;
+      margin-right: 15px;
+  }
+  .alignright {
+      float: right;
+      margin-left: 15px;
+  }
+  .aligncenter {
+      display: block;
+      margin: 0 auto 15px;
+  }
+  a:focus { outline: 0 solid }
+  img {
+      max-width: 100%;
+      height: auto;
+  }
+  .fix { overflow: hidden }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      margin: 0 0 15px;
+      font-weight: 700;
+  }
+  html,
+  body { height: 100% }
+
+  a {
+      -moz-transition: 0.3s;
+      -o-transition: 0.3s;
+      -webkit-transition: 0.3s;
+      transition: 0.3s;
+      color: #333;
+  }
+  a:hover { text-decoration: none }
+
+
+
+  .search-box{margin:80px auto;position:absolute;}
+  .caption{margin-bottom:50px;}
+  .loginForm input[type=text], .loginForm input[type=password]{
+    margin-bottom:10px;
+  }
+  .loginForm input[type=submit]{
+    background:#fb044a;
+    color:#fff;
+    font-weight:700;
+
+  }
+
+  /*
+  body {
+      padding: 2.5em 2em 0em;
+      background: #f5f7f9;
+          font-size: 1.5em;
+          color: #346;
+          font-family: Signika, -apple-system, sans-serif;
+  }*/
+    </style>
+  </head>
+  <body>
+    <nav id = "navbarColo" class="navbar navbar-expand-lg navbar-light  navbar-fixed">
+      <a class="navbar-brand" href="#" style="font-family: garamond; border-bottom: medium solid black "><strong>J</strong>Coin</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/buy">Buy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/scoreboard">Wallet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/library">Blocks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/transactions">Transaction</a>
+          </li>
+        </ul>
+        <span class="navbar-text">
+          <a href="#" class="fa fa-facebook"></a>
+          <a href="#" class="fa fa-twitter"></a>
+          <a href="#" class="fa fa-instagram"></a>
+        </span>
+      </div>
+    </nav>
+      <div class="container">
+              <hr style="width: 100%; margin: auto;">
+        <div class="py-5 text-center">
+          <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+          <h2>Buy some JCoin</h2>
+          <p class="lead">JoshCoin is compatible with traditional billing systems. To purchase coin see below.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted">Add Coin to...</span>
+              <span class="badge badge-secondary badge-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
+              <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                  <h6 class="my-0">First Address</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">$12</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                  <h6 class="my-0">Second Address</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">$8</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                  <h6 class="my-0">Third Address</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">$5</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between bg-light">
+                <div class="text-success">
+                  <h6 class="my-0">Promo code</h6>
+                  <small>EXAMPLECODE</small>
+                </div>
+                <span class="text-success">-$5</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Total (USD)</span>
+                <strong>$20</strong>
+              </li>
+            </ul>
+
+
+            <form id="form1" method="post" class="needs-validation h-100">
+              <div class="form-group">
+                <label for="email">Address to receive coin</label>
+                <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" name="address" placeholder="ex: 038ajdhwj1k..." required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+              </div>
+                  <div class="mssg bg-danger">
+                    <span id="check" ></span>
+                  </div>
+              <button type="submit" value="Login" class="btn btn-outline-dark">Buy</button>
+            </form>
+
+
+
+
+
+
+          </div>
+          <div class="col-md-8 order-md-1 rounded box-shadow">
+            <h4 class="mb-3">Billing address</h4>
+            <form id="andfksa" class="needs-validation">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName">First name</label>
+                  <input type="text" class="form-control" id="firstName" placeholder="John" value="" required>
+                  <div class="invalid-feedback">
+                    Valid first name is required.
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="lastName">Last name</label>
+                  <input type="text" class="form-control" id="lastName" placeholder="Doe" value="" required>
+                  <div class="invalid-feedback">
+                    Valid last name is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="username">Username</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">@</span>
+                  </div>
+                  <input type="text" class="form-control" id="username" placeholder="Username" required>
+                  <div class="invalid-feedback" style="width: 100%;">
+                    Your username is required.
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                <div class="invalid-feedback">
+                  Please enter a valid email address for shipping updates.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                <div class="invalid-feedback">
+                  Please enter your shipping address.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+                <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+              </div>
+
+              <div class="row">
+                <div class="col-md-5 mb-3">
+                  <label for="country">Country</label>
+                  <select class="custom-select d-block w-100" id="country" required>
+                    <option value="">Choose...</option>
+                    <option>United States</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please select a valid country.
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="state">State</label>
+                  <select class="custom-select d-block w-100" id="state" required>
+                    <option value="">Choose...</option>
+                    <option>California</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please provide a valid state.
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="zip">Zip</label>
+                  <input type="text" class="form-control" id="zip" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Zip code required.
+                  </div>
+                </div>
+              </div>
+              <hr class="mb-4">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="same-address">
+                <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="save-info">
+                <label class="custom-control-label" for="save-info">Save this information for next time</label>
+              </div>
+              <hr class="mb-4">
+
+              <h4 class="mb-3">Payment</h4>
+
+              <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                  <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                  <label class="custom-control-label" for="credit">Credit card</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="debit">Debit card</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="paypal">Paypal</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="cc-name">Name on card</label>
+                  <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                  <small class="text-muted">Full name as displayed on card</small>
+                  <div class="invalid-feedback">
+                    Name on card is required
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="cc-number">Credit card number</label>
+                  <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Credit card number is required
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label for="cc-expiration">Expiration</label>
+                  <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Expiration date required
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="cc-expiration">CVV</label>
+                  <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                  <div class="invalid-feedback">
+                    Security code required
+                  </div>
+                </div>
+              </div>
+              <hr class="mb-4">
+              <button class="btn btn-dark btn-lg btn-block" type="submit">Continue to checkout</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="LangTable"><a href="/buy" id="aa"></a>
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+          <p class="mb-1">&copy; 2020 JoshCoin LLC.s</p>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+          </ul>
+        </footer>
+      </div>
+
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+      <script src="../../../../assets/js/vendor/popper.min.js"></script>
+      <script src="../../../../dist/js/bootstrap.min.js"></script>
+      <script src="../../../../assets/js/vendor/holder.min.js"></script>
+      <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+      </script>
+    </body>
+  </html>
+
+
+
+
+
+
+
+
+
+
+  if(result == req.body.pub_key){
+  	var transaction = req.body;
+
+  	try{
+
+  		var newWallet = new wallet(req.body.pub_key, req.body.priv_key);
+
+  	}catch (e){
+
+  		console.log(e);
+
+  	}
+
+  	//*************************************************************************************************************************************
+  	// BEGIN CLIENT SIDE TCP CONNECTION TO NODE
+  	//*************************************************************************************************************************************
+
+  	//prepare transaction for delivery
+  	function _packageTransaction(){
+
+  	  var new_Transaction = {};//new transaction(0, '0001', Date.now());
+
+  	  //new_Transaction.input(newUser.address.toString('hex'), newUser.address.toString('hex'), 10);
+
+  	  console.log(new_Transaction);
+
+  	  return new_Transaction;
+  	}
+
+  	//emit packaged transaction to nodes
+  	function emit_Transaction(new_Transaction){
+
+  	  clients.write(JSON.stringify(new_Transaction));
+
+  	}
+  console.log("made it through");
+  	const clients = net.connect({port: 2222}, (err) => {
+  	  if(err) console.log( err);
+
+  	  console.log(clients.address());
+
+  	  // 'connect' listener
+  	  console.log('connected to server!');
+
+  	    //var new_Transaction = emit_Transaction(req.body);
+
+  	    // call the rest of the code and have it execute after 3 seconds
+  	    setTimeout(function() {
+  	    emit_Transaction(req.body);
+  	  }, 4000);
+
+  	});
+  	clients.on('data', (data) => {
+  	  console.log("here" + data.toString());
+  	  //clients.end();
+  	});
+  	clients.on('end', () => {
+  	  console.log('disconnected from server');
+  		res.send({"Success":"Success!"});
+  	});
+
+
+  	//*************************************************************************************************************************************
+  	// END CLIENT SIDE TCP CONNECTION TO NODE
+  	//*************************************************************************************************************************************
+
+  }else{
+  	console.log("/transaction says :: 'No DICE'");
+  }
+  });
+
+
+
+
+
+  var express = require('express');
+  var path = require('path');
+  var net = require('net');
+  const readline = require("readline");
+
+  var secp256k1 = require('secp256k1')
+
+  let user = require('../models/User')
+  let transaction = require('../models/Transaction')
+  let wallet = require('../models/Wallet')
+  const newUser = new user();
+
+  //var new_Transaction = new transaction(0, '0001', Date.now());
+
+  var router = express.Router();
+
+  var ssn;
+
+  router.get('/', function (req, res, next) {
+  	pubKey = newUser.publicKey;
+  	publicKey = Buffer.from(pubKey).toString('hex')
+
+  	res.render('landing.ejs', {
+  		privateKey: newUser.privateKey.toString('hex'),
+  		publicKey: publicKey,
+  		address: newUser.address,
+  		amount: 0
+  	});
+  });
+
+  router.get('/buy', function (req, res, next) {
+  	res.render('buy.ejs');
+  });
+
+  function send_Transaction(transaction, protocol){
+
+
+
+  		//*************************************************************************************************************************************
+  		// BEGIN CLIENT SIDE TCP CONNECTION TO NODE
+  		//*************************************************************************************************************************************
+
+  	const clients = net.connect({port: 2222}, (err) => {
+  		if(err) console.log( err);
+
+  		console.log(clients.address());
+
+  		// 'connect' listener
+  		console.log('connected to server!');
+
+  			//var new_Transaction = emit_Transaction(req.body);
+  			clients.write(JSON.stringify(transaction));
+
+  	});
+  	clients.on('data', (data) => {
+  		console.log("here" + data.toString());
+  		//clients.end();
+  	});
+  	clients.on('end', () => {
+  		console.log('disconnected from server');
+  		res.send({"Success":"Success!"});
+  	});
+
+
+
+  	//*************************************************************************************************************************************
+  	// END CLIENT SIDE TCP CONNECTION TO NODE
+  	//*************************************************************************************************************************************
+  }
+
+  router.post('/buys', function (req, res, next) {
+
+  	var      OP_ADD         = 0x93;
+
+  	var      OP_DUP         = 0x76;
+
+  	var      OP_HASH160     = 0xa9;
+
+  	var      OP_EQUALVERIFY = 0x88;
+
+  	var      OP_CHECKSIG    = 0xac;
+
+  	var      OP_HALT        = 0x94;
+
+  	if(req.body){
+
+  		var amount = req.body.amount;
+  		var pub_key = req.body.pub_key;
+
+  		var new_Transaction = new transaction(Date.now(), 0);
+
+  		try{
+
+  			var hash = new_Transaction.ripemd160(new_Transaction.sha256(pub_key));
+
+  		} catch (e){
+
+  			console.log('FAILED to Hash');
+
+  		}
+
+  		var verify = hash.toString('hex');jj
+
+  		var script = [OP_DUP, OP_HASH160, verify, OP_EQUALVERIFY, OP_CHECKSIG];
+
+  		new_Transaction.output(amount, script);
+
+  		console.log(pub_key + " :: " + JSON.stringify(new_Transaction));
+
+  		try{
+
+  			send_Transaction(new_Transaction);
+
+  		} catch (e){
+
+  			console.log("Send Transaction FAILED");
+
+  		}
+  		res.send({"Success":"Success!"});
+  	}else{
+  		res.send({"Success":"Failure!"});
+  	}
+
+  });
+
+  router.get('/transactions', function (req, res, next) {
+  	res.render('transactions.ejs');
+  });
+
+  router.post('/transaction', function (req, res, next){
+  console.log('Client called :: /transaction');
+  try{
+  	var uint = Uint8Array.from(Buffer.from(req.body.priv_key, 'hex'));
+  	var result = secp256k1.publicKeyCreate(uint);
+  	result = Buffer.from(result, 'uint8');
+  	result = result.toString('hex');
+  }	catch(e){
+  	console.log("SERVER ERROR :: " + e);
+  }
+
+
+  if(result == req.body.pub_key){
+  	var transaction = req.body;
+
+  	try{
+
+
+
+
+
+
+
+
+
+    //
+    //https://gist.github.com/sid24rane/2b10b8f4b2f814bd0851d861d3515a10
+    //
+
+    const chalk = require('chalk');
+    var net = require('net');
+    var stream = require('stream');
+    const secureRandom = require('secure-random');
+    var EC = require('elliptic').ec;
+    const sha256 = require('js-sha256');
+    const ripemd160 = require('ripemd160');
+    const bs58 = require('bs58')
+    var crypto = require('crypto');
+    var secp256k1 = require('secp256k1');
+    var ecdsa = new EC('secp256k1');
+
+
+    require('dotenv').config();
+
+    // Create SocketIO instance, connect
+
+    var client = require("socket.io-client");
+    var socket = client.connect("http://localhost:3000");
+    socket.emit("test", "foo");
+
+        // Add a connect listener
+        socket.on('connect',function() {
+          console.log('Client has connected to the server!');
+        });
+        // Add a connect listener
+        socket.on('message',function(data) {
+          console.log('Received a message from the server!',data);
+        });
+        // Add a disconnect listener
+        socket.on('disconnect',function() {
+          console.log('The client has disconnected!');
+        });
+
+        // Sends a message to the server via sockets
+        function sendMessageToServer(message) {
+          socket.send(message);
+        };
+
+
+    // Create and initialize EC context
+    // (better do it once and reuse it)
+    var ecdsa = new EC('secp256k1');
+
+    let blChain= require('./models/blockchain')
+    let blck = require('./models/block')
+    let user = require('./models/User')
+    let transaction = require('../models/Transaction')
+    //let wallet = require('./models/Wallet')
+    //let transaction = require('./models/Transaction')
+
+    //let interpreter = require('./virtual_machine/interpreter')
+
+    let blockChain = new blChain;
+    const newUser = new user();
+
+    const POOL_REQ = process.env.POOL_REQ;
+    const DNS_PORT = process.env.DNS_PORT;
+
+    //POOL of all current transactions before block processing, stored in ram
+    var transaction_Pool = [POOL_REQ];
+
+
+    var count = 0;
+    var flag = false;
+
+    //*************************************************************************************************************************************
+    // BEGIN CLIENT SIDE TCP CONNECTION TO DNS
+    //*************************************************************************************************************************************
+
+    var server = net.createServer();
+
+    var client = net.connect(1234, 'localhost', function() {
+      console.log(chalk.green("NODE SUCCESSFULLY CONNECTED TO DNS"));
+    });
+    client.on('error', function(ex) {
+      //console.log(chalk.red("NODE FAILED TO CONNECT TO DNS"));
+      //console.log(ex);
+    });
+
+    client.on('data', (data) => {
+      console.log(data.toString());
+      client.end();
+    });
+    client.on('close', function() {
+           console.log('connection got closed, will try to reconnect');
+             client.end();
+           });
+    client.on('end' , function(){
+          console.log('Requested an end to the TCP connection');
+           });
+
+    //emitted when server closes ...not emitted until all connections closes.
+    server.on('close',function(){
+      console.log('Server closed !');
+    });
+
+    //*************************************************************************************************************************************
+    // END CLIENT SIDE TCP CONNECTION TO DNS
+    //*************************************************************************************************************************************
+
+    // emitted when new client connects
+    server.on('connection',function(socket){
+
+    //this property shows the number of characters currently buffered to be written. (Number of characters is approximately equal to the number of bytes to be written, but the buffer may contain strings, and the strings are lazily encoded, so the exact number of bytes is not known.)
+    //Users who experience large or growing bufferSize should attempt to "throttle" the data flows in their program with pause() and resume().
+
+      console.log('Buffer size : ' + socket.bufferSize);
+
+      console.log('---------server details -----------------');
+
+      var address = server.address();
+      var port = address.port;
+      var family = address.family;
+      var ipaddr = address.address;
+      console.log('Server is listening at port' + port);
+      console.log('Server ip :' + ipaddr);
+      console.log('Server is IP4/IP6 : ' + family);
+
+      var lport = socket.localPort;
+      var laddr = socket.localAddress;
+      console.log('Server is listening at LOCAL port ' + lport);
+      console.log('Server LOCAL ip : ' + laddr);
+
+      console.log('------------remote client info --------------');
+
+      var rport = socket.remotePort;
+      var raddr = socket.remoteAddress;
+      var rfamily = socket.remoteFamily;
+
+      console.log('REMOTE Socket is listening at port ' + rport);
+      console.log('REMOTE Socket ip : ' + raddr);
+      console.log('REMOTE Socket is IP4/IP6 : ' + rfamily);
+
+      console.log('--------------------------------------------')
+    //var no_of_connections =  server.getConnections(); // sychronous version
+    server.getConnections(function(error,count){
+      console.log('Number of concurrent connections to the server : ' + count);
+    });
+
+    socket.setEncoding('utf8');
+
+    socket.setTimeout(800000,function(){
+      // called after timeout -> same as socket.on('timeout')
+      // it just tells that soket timed out => its ur job to end or destroy the socket.
+      // socket.end() vs socket.destroy() => end allows us to send final data and allows some i/o activity to finish before destroying the socket
+      // whereas destroy kills the socket immediately irrespective of whether any i/o operation is goin on or not...force destry takes place
+      console.log('Socket timed out');
+      socket.end()
+    });
+
+    var chain = {};
+
+    if(blockChain.blockchain.length != 0){
+      try{
+
+        //socket.write(JSON.stringify(blockChain.blockchain));
+
+      }catch (e){
+
+        console.log(e);
+
+      }
+    }
+
+
+    var index = 1;
+
+
+
+    var sha256 = function(buffer) {
+
+        var f = crypto.createHash("SHA256");
+
+        var h = f.update(buffer);
+
+        return h.digest();
+
+    };
+
+
+    var ripemd160 = function(buffer) {
+
+        var f = crypto.createHash("RIPEMD160");
+
+        var h = f.update(buffer);
+
+        return h.digest();
+
+    };
+
+    function check_TransactionSum(publicKey, privateKey){
+      var total = [];
+      UTXO = {
+
+      };
+
+      var counter = 0;
+      console.log(blockChain.blockchain);
+      try{
+        console.log(publicKey.toString('hex'));
+      var hash = ripemd160(sha256(publicKey)).toString('hex');
+      console.log("hash " + hash);
+      for(var j = 0; j < blockChain.blockchain.length; j++){
+        for(var k = 0; k < blockChain.blockchain[j].length; k++){
+          if(blockChain.blockchain[j].transaction_Pool[k].output.script[2] == hash){
+            UTXO = {
+              block : j,
+              index : k,
+              amount : blockChain.blockchain[j].transaction_Pool[k].output.amount
+            };
+            total[count] = UTXO;
+          }
+        }
+        //if(blockChain.blockChain[i].data)
+      }
+
+      //var newWallet = new wallet(publicKey, privateKey);
+      //newWallet.walletAmount()
+
+    }catch (e){
+      console.log("SERVER ERROR :: " + e);
+    }
+    }
+
+
+    //prepare transaction for delivery
+    function _packageTransaction(client_Data, count){
+      var new_Transaction = {};//new transaction(Date.now(), count);
+      //new_Transaction.output(client_Data.amount, );
+
+      console.log(new_Transaction);
+
+      return new_Transaction;
+    }
+
+    //emit packaged transaction to nodes
+    function emit_Transaction(new_Transaction){
+
+      clients.write(JSON.stringify(new_Transaction));
+
+    }
+
+
+    //*************************************************************************************************************************************
+    // When client sends data to node
+    //*************************************************************************************************************************************
+
+    socket.on('data',function(client_Data){
+      var bread = socket.bytesRead;
+      var bwrite = socket.bytesWritten;
+
+      console.log('Bytes read : ' + bread);
+      console.log('Bytes written : ' + bwrite);
+      console.log('Data sent to server : ' + client_Data);
+
+
+      if(count == POOL_REQ){
+        count = 0;
+        for(var i = 0; i < POOL_REQ; i++){
+
+          if(blockChain.addNewBlock(new blck(index++, { transaction_Pool }))){
+            console.log(newUser.coin + "  " + blockChain.blockchain[i].coin.amount);
+            newUser.coin += blockChain.blockchain[i].coin.amount;
+            blockChain.blockchain[i].coin.amount = 0;
+          }
+        }
+
+        flag = true;
+
+      }else{
+
+        var user_input = JSON.parse(client_Data);
+
+        const protocol = user_input.protocol;
+
+        switch (protocol) {
+          case 0001:
+
+            var      OP_ADD         = 0x93;
+
+            var      OP_DUP         = 0x76;
+
+            var      OP_HASH160     = 0xa9;
+
+            var      OP_EQUALVERIFY = 0x88;
+
+            var      OP_CHECKSIG    = 0xac;
+
+            var      OP_HALT        = 0x94;
+
+            var amount = user_input.amount;
+        		var pub_key = user_input.pub_key;
+
+        		var new_Transaction = new transaction(Date.now(), 0);
+
+        		try{
+
+        			var hash = new_Transaction.ripemd160(new_Transaction.sha256(pub_key));
+
+        		} catch (e){
+
+        			console.log('FAILED to Hash :: ' + e);
+
+        		}
+
+        		var verify = hash.toString('hex');jj
+
+        		var script = [OP_DUP, OP_HASH160, verify, OP_EQUALVERIFY, OP_CHECKSIG];
+
+        		new_Transaction.output(amount, script);
+
+        		console.log(pub_key + " :: " + JSON.stringify(new_Transaction));
+
+        		try{
+
+
+
+        		} catch (e){
+
+        			console.log("Send Transaction FAILED");
+
+        		}
+
+            break;
+          case 0002:
+            break;
+          case 0003:
+            break;
+          case 0004:
+            break;
+          default:
+            console.log(`Sorry, we are out of `);
+        }
+        //_packageTransaction(client_Data, count);
+
+        transaction_Pool[count] = user_input;
+        if(blockChain.blockchain.length > 1){
+          check_TransactionSum(client_Data.pub_key, client_Data.priv_key);
+        }
+        console.log("Transaction :: " + transaction_Pool[count] + " added to TRANSACTION_POOL");
+        count++;
+      }
+
+      if(flag){
+        try{
+          for(var i = 0; i < blockChain.blockchain.length; i++){
+            console.log(chalk.green("\nBlock :: " + i + " " + JSON.stringify(blockChain.blockchain[i]) + "\n"));
+          }
+
+          console.log("Nodes Earned Coin :: " + newUser.coin);
+          socket.write(JSON.stringify(blockChain.blockchain));
+
+        }catch (exception){
+          console.log(exception);
+        }
+
+        //echo data
+        var is_kernel_buffer_full=true ;//= socket.write('Node : ' + server.address().port + ' successfully added Block :: ' + JSON.stringify(blockChain, null, 4));
+        if(is_kernel_buffer_full){
+          console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
+          flag = false;
+        }else{
+          socket.pause();
+        }
+    }
+    });
+
+    socket.on('rand',function(data){
+      console.log("new data: " + data)
+    });
+
+    socket.on('drain',function(){
+      console.log('write buffer is empty now .. u can resume the writable stream');
+      socket.resume();
+    });
+
+    socket.on('error',function(error){
+      console.log('Error : ' + error);
+    });
+
+    socket.on('timeout',function(){
+      console.log('Socket timed out !');
+      socket.end('Timed out!');
+      // can call socket.destroy() here too.
+    });
+
+    socket.on('end',function(data){
+      console.log('Socket ended from other end!');
+      console.log('End data : ' + data);
+    });
+
+    socket.on('close',function(error){
+      var bread = socket.bytesRead;
+      var bwrite = socket.bytesWritten;
+      console.log('Bytes read : ' + bread);
+      console.log('Bytes written : ' + bwrite);
+      console.log('Socket closed!');
+      if(error){
+        console.log('Socket was closed coz of transmission error');
+      }
+    });
+
+    setTimeout(function(){
+      var isdestroyed = socket.destroyed;
+      console.log('Socket destroyed:' + isdestroyed);
+      socket.destroy();
+    },1200000);
+
+    });
+
+
+    //
+    //END CONNECT
+    //
+
+
+
+
+    // emits when any error occurs -> calls closed event immediately after this.
+    server.on('error',function(error){
+      console.log('Error: ' + error);
+    });
+
+    //emits when server is bound with server.listen
+    server.on('listening',function(){
+      console.log('Port :: ' + server.address().port);
+    });
+
+    server.maxConnections = 10;
+
+    //static port allocation
+    server.listen(2222);
+
+    // for dyanmic port allocation
+    //server.listen(function(){
+      //var address = server.address();
+      //var port = address.port;
+      //var family = address.family;
+      //var ipaddr = address.address;
+      //console.log('Server is listening at port' + port);
+      //console.log('Server ip :' + ipaddr);
+      //console.log(ipaddr);
+      //console.log('Server is IP4/IP6 : ' + family);
+    //});
+
+
+
+    var islistening = server.listening;
+
+    if(islistening){
+      console.log(chalk.green('Server STATUS :: Listening'));
+    }else{
+      console.log(chalk.red('Server STATUS :: Not Listening'));
+    }
+
+    setTimeout(function(){
+      server.close();
+    },5000000);
+
+
+
+    //---------------------client----------------------
+
+    // creating a custom socket client and connecting it....
+    //var client  = new net.Socket();
+    //client.connect({
+      //port:2222
+    //});
+
+    //client.on('connect',function(){
+      //console.log('Client: connection established with server');
+
+      //console.log('---------client details -----------------');
+      //var address = client.address();
+      //var port = address.port;
+      //var family = address.family;
+      //var ipaddr = address.address;
+      //console.log('Client is listening at port ' + port);
+      //console.log('Client ip : ' + ipaddr);
+      //console.log('Client is IP4/IP6 : ' + family);
+
+
+      // writing data to server
+      //client.write('hello from client');
+
+    //});
+
+    //client.setEncoding('utf8');
+
+    //client.on('data',function(data){
+      //console.log('Data from server: ' + data);
+    //});
+
+    //setTimeout(function(){
+      //client.end('Bye bye server');
+    //},5000);
+
+    //NOTE:--> all the events of the socket are applicable here..in client...
+
+
+    // -----------------creating client using net.connect instead of custom socket-------
+
+    // server creation using net.connect --->
+    // u can also => write the below code in seperate js file
+    // open new node instance => and run it...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var crypto = require('crypto');
+    var EC = require('elliptic').ec;
+    var secp256k1 = require('secp256k1');
+    var ecdsa = new EC('secp256k1');
+    var format = require('ecdsa-sig-formatter');
+    var forge = require('node-forge');
+
+    let user = require('../models/User')
+
+    var sha256 = function(buffer) {
+
+        var f = crypto.createHash("SHA256");
+
+        var h = f.update(buffer);
+
+        return h.digest();
+
+    };
+
+
+    var ripemd160 = function(buffer) {
+
+        var f = crypto.createHash("RIPEMD160");
+
+        var h = f.update(buffer);
+
+        return h.digest();
+
+    };
+
+
+
+    Buffer.prototype.toReverseHexaNotation = function () {
+
+        var hexa = "";
+
+        for (var i = this.length-1; i >= 0; i--) {
+
+           var digits =  this[i].toString(16);
+
+            hexa += ("0" + digits).slice(-2); // Add "0" for single digit
+
+        }
+
+        return hexa;
+
+    };
+
+
+    var numberToInt8 = function (n) {
+
+        return new Buffer([n]);
+
+    };
+
+
+    var numberToInt32LE = function (n) {
+
+        var buffer = new Buffer(4);
+
+        buffer.writeUInt32LE(n,0);
+
+        return buffer;
+
+    };
+
+
+    var numberToInt64LE = function (n) {
+
+       var buffer = new Buffer(8);
+
+       buffer.writeUInt32LE(n % 0xFFFFFFFFFFFFFFFF, 0);
+
+       buffer.writeUInt32LE(Math.floor(n / 0xFFFFFFFFFFFFFFFF), 4);
+
+       return buffer;
+
+    };
+
+
+    var serializeAmount = function (amount) {
+
+        return numberToInt64LE(amount * 100000000);
+
+    };
+
+
+    var hexaNotationToInt256LE = function (hexa) {
+
+        var bytes = new Array(32);
+
+        for (var i = 0, j = 31, len = hexa.length; i < len; i+=2, j--) {
+
+            bytes[j] = parseInt(hexa[i]+hexa[i+1],16);
+
+        }
+
+        return new Buffer(bytes);
+
+    };
+
+
+
+    var      OP_ADD         = 0x93;
+
+    var      OP_DUP         = 0x76;
+
+    var      OP_HASH160     = 0xa9;
+
+    var      OP_EQUALVERIFY = 0x88;
+
+    var      OP_CHECKSIG    = 0xac;
+
+    var      OP_HALT        = 0x94;
+
+    console.log(OP_ADD + "  " + OP_DUP + " " + OP_HASH160 + " " + OP_EQUALVERIFY + " " + OP_CHECKSIG + " " + OP_HALT);
+
+
+
+    var serializeTransaction = function(tr) {
+        var buffers = [];
+
+        buffers.push(numberToInt32LE(tr.version));
+
+        buffers.push(serializeInputs(tr.inputs));
+        console.log(tr.inputs);
+        buffers.push(serializeOutputs(tr.outputs));
+
+        buffers.push(numberToInt32LE(tr.lockTime));
+
+        if (tr.hashType)
+
+            buffers.push(numberToInt32LE(Number(tr.hashType)));
+
+        return Buffer.concat(buffers);
+
+    };
+
+
+    var serializeInputs = function (inputs) {
+
+        var buffers = [];
+
+
+        var inputsSize = inputs.length;
+
+        buffers.push(numberToInt8(inputsSize));
+
+
+        for (var i = 0; i < inputsSize; i++) {
+
+            var input = inputs[i];
+
+
+            buffers.push(hexaNotationToInt256LE(input.txid));
+
+            buffers.push(numberToInt32LE(input.index));
+            JSON.stringify(input.script);
+            buffers.push(compileScript(input.script));
+
+            buffers.push(numberToInt32LE(0xffffffff));
+
+        }
+
+        return Buffer.concat (buffers);
+
+    };
+
+
+    var serializeOutputs = function (outputs) {
+
+        var buffers = [];
+
+
+        var outputsSize = outputs.length;
+
+        buffers.push(numberToInt8(outputsSize));
+
+        for (var i = 0; i < outputsSize; i++) {
+
+            var output = outputs[i];
+
+            buffers.push(serializeAmount(output.amount));
+
+            buffers.push(compileScript(output.script));
+
+        }
+
+        return Buffer.concat (buffers);
+
+    };
+
+
+    var compileScript = function(program) {
+
+        var buffers = [];
+
+        var bytes = 0;
+
+        for (var i = 0, len = program.length; i < len; i++) {
+
+            var code = program[i];
+
+            var type = typeof(code);
+
+            switch (type) {
+
+                case 'number':
+                  //console.log(code);
+                    buffers.push(numberToInt8(code));
+
+                    bytes++;
+
+                    break;
+
+                case 'string':
+                    //console.log("string" + code);
+                    var operand = new Buffer(code, 'hex');
+                    //console.log(operand);
+                    buffers.push(numberToInt8(operand.length));
+
+                    buffers.push(operand);
+
+                    bytes += operand.length + 1
+
+                    break;
+                case 'object':
+                  var operand = new Buffer.from(JSON.stringify(code));
+                  //console.log("object"+operand);
+                  buffers.push(numberToInt8(operand.length));
+
+                  buffers.push(operand);
+
+                  bytes += operand.length + 1
+                  break;
+
+            }
+
+        }
+
+        buffers.unshift(numberToInt8(bytes));
+        for(var m = 0; m < buffers.length; m++){
+          //console.log(buffers[m]);
+        }
+        //console.log('\n')
+        var hold = Buffer.concat(buffers);
+
+        return Buffer.concat(buffers);      //return array buffer of program
+
+    };
+
+
+    // A simple virtual machine to run a decoded P2SH (Pay to Script Hash) scripts
+
+
+
+
+    var runScript = function (program, stack, currentTransaction, currentInputIndex) {
+        var operand;
+
+        var operand1;
+
+        var operand2;
+
+        var ip = 0; // instruction pointer
+
+        var last = program[ip++];
+
+        while (ip <= last) {
+
+            var instruction = program[ip++];
+
+            switch (instruction) {
+
+                case OP_DUP:
+
+                    operand = stack.pop();  //public Key 275... Problem no....
+
+                    stack.push(operand);
+                    //console.log(operand);
+                    stack.push(operand);
+
+                    break;
+
+
+                 case OP_ADD:
+
+                    operand1 = stack.pop().readInt32LE();
+                    operand2 = stack.pop().readInt32LE();
+
+                    stack.push(numberToInt32LE(operand1 + operand2));
+
+                    break;
+
+
+                case  OP_HASH160:
+
+                    operand = stack.pop();  //public key 275...
+
+                    stack.push(ripemd160(sha256(operand.toString('hex'))));
+
+                    break;
+
+
+                case  OP_EQUALVERIFY:
+
+                    //no worries
+                    operand1 = stack.pop();   //BOTH SHOULD BE RESULT TO 45...
+                    //no worries
+                    operand2 = stack.pop();
+
+                    if (! operand1.compare(operand2) == 0) return false;
+
+                    break;
+
+
+                case  OP_CHECKSIG:
+                console.log("nice");
+
+                    operand1 = stack.pop(); //public key
+
+                    operand2 = stack.pop(); //signature, with sighash at the end
+
+                    // operand 1 is Public Key
+
+                    var publicKey = operand1;
+
+
+                    // operand 2 contains hashType
+
+                    //var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+
+                    // operand 2 contains DER Signature
+
+                    var hashType = 1;
+                    //var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+                    try{
+
+                      var signatureDER = JSON.parse(operand2);
+
+                    }catch (e){
+
+                      console.log(e);
+
+                    }
+
+                    //console.log(signatureDER);
+                    //console.log(signatureDER.toString('hex'));
+
+                    //var signature = secp256k1.signatureImport(signatureDER); // Decode a signature in DER format
+                    //signature = new Buffer(signature, 'uint8');
+
+
+                    // recover signed transaction and hash of this transaction
+                    var d = "hey";
+
+                    var hashco = sha256 (sha256 (new Buffer.from(d)));
+
+                    console.log("Outcome :: " + ecdsa.verify(hashco, signatureDER, publicKey));
+
+                    var copy = copyForSignature(currentTransaction, currentInputIndex, hashType);
+    //console.log(JSON.stringify(copy)+ " fasfdfasdf");
+    //console.log(" Copy " + JSON.stringify(copy));
+                    //console.log(signatureDER.toString('hex'));
+                    var buffer = serializeTransaction(copy);
+
+                    var hashcode = sha256 (sha256 (buffer));
+
+                    // Check signature
+                    //console.log("run " + ecdsa.verify(hashcode, signatureDER, publicKey));
+                    if (! ecdsa.verify(hashcode, signatureDER, publicKey)) return false;
+
+                    break;
+                case OP_HALT:
+                    ip = last;
+                    break;
+
+                default:
+
+                    var size = instruction;
+
+
+                    //size  = 72
+                    //yoooo30450221009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f2990502206b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab294501
+                    //size = 33
+                    //yoooo0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e
+                    //size = 20
+                    //yoooo4586dd621917a93058ee904db1b7a43bfc05910a
+                    //
+                    var data  = new Buffer(size);
+
+                    program.copy(data, 0, ip, size+ip);
+                    //console.log("yoooo" + data.toString('hex'));
+
+                    stack.push(data);
+
+                    ip += size;
+
+                    break;
+
+            }
+
+        }
+
+        return true;
+
+    };
+
+    var SIGHASH_ALL          = "01";
+
+    var SIGHASH_NONE         = "02";
+
+    var SIGHASH_SINGLE       = "03";
+
+    var SIGHASH_ANYONECANPAY = "80";
+
+
+    // We create a previous transaction with an output
+
+    // We skip other data that are not required for validation
+
+
+      const newUser = new user();
+
+      var privateKey = newUser.privateKey;
+      var publicKey = newUser.publicKey;
+
+      var data = "hey";
+
+      var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+      var signature = ecdsa.sign(hashcode, privateKey);//.signature;
+
+      var signatureDER = signature.toDER();
+
+      signatureDER = new Uint8Array(signatureDER);
+      signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+      console.log(ecdsa.verify(hashcode, signature, publicKey));
+      console.log("ddedd" + ecdsa.verify(sha256 (sha256 (new Buffer.from("d"))), signature, publicKey));
+      console.log("yo");
+
+    // We create a previous transaction with an output
+
+    // We skip other data that are not required for validation
+
+    var privKe = "";
+    var pubKe = "0321454dd740878e06f070f35ca238baa491d988e2749d3bf11c7b3e782c3e16b9";
+
+    publicKey = Buffer.from(publicKey).toString('hex');
+    console.log("pubkey    " + publicKey)
+    var ver = ripemd160(sha256(publicKey));
+    ver = ver.toString('hex');
+    console.log("ver   " + ver);
+
+    var previousTransaction = {
+
+        version: 1,
+
+        inputs: {}, // missing actual data here
+
+        outputs: [
+
+            {}, // missing output[0]
+
+            {
+
+                amount: 0.09212969,
+
+                script: [
+
+                    OP_DUP,
+
+                    OP_HASH160,
+
+                    ver,
+
+                    OP_EQUALVERIFY,
+
+                    OP_CHECKSIG
+
+                ]
+
+            }
+
+        ],
+
+        lockTime: 0
+
+    };
+
+    var transaction = {
+
+       version: 1,
+
+       inputs: [
+
+            {
+
+                txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+                index: 1,
+
+
+                script: [
+
+                      signature,    // hashtype
+
+    //"0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e"
+                    publicKey,//+ SIGHASH_ALL, // Public Key
+
+                ]
+            }
+
+       ],
+
+       outputs: [
+
+            {
+
+                amount: 0.05580569,
+
+                script: [
+
+                        OP_DUP,
+
+                        OP_HASH160,
+
+                        ver,
+
+                        OP_EQUALVERIFY,
+
+                        OP_CHECKSIG
+
+                ],
+
+            }
+
+       ],
+
+       lockTime: 0
+
+    };
+
+
+
+
+
+
+
+    var dbtx = {};
+
+    dbtx["14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9"] = previousTransaction;
+
+    dbtx["9e9f1efee35b84bf71a4b741c19e1acc6a003f51ef8a7302a3dcd428b99791e4"] = transaction;
+
+
+    var copyForSignature = function(transaction, inputIndex, hashType) {
+
+        var copy = Object.assign({}, transaction);
+
+
+        var inputs = copy.inputs;
+
+        for (var i = 0, len = inputs.length; i < len; i++) {
+
+            inputs[i].script = []; // reset script to nothing
+
+        }
+
+
+        var currentInput = inputs[inputIndex];
+
+
+        var previousTransaction =  dbtx[currentInput.txid];
+
+
+
+
+
+
+
+
+
+
+
+        var crypto = require('crypto');
+        var EC = require('elliptic').ec;
+        var secp256k1 = require('secp256k1');
+        var ecdsa = new EC('secp256k1');
+        var format = require('ecdsa-sig-formatter');
+        var forge = require('node-forge');
+
+        let user = require('../models/User')
+
+        var sha256 = function(buffer) {
+
+            var f = crypto.createHash("SHA256");
+
+            var h = f.update(buffer);
+
+            return h.digest();
+
+        };
+
+
+        var ripemd160 = function(buffer) {
+
+            var f = crypto.createHash("RIPEMD160");
+
+            var h = f.update(buffer);
+
+            return h.digest();
+
+        };
+
+
+
+        Buffer.prototype.toReverseHexaNotation = function () {
+
+            var hexa = "";
+
+            for (var i = this.length-1; i >= 0; i--) {
+
+               var digits =  this[i].toString(16);
+
+                hexa += ("0" + digits).slice(-2); // Add "0" for single digit
+
+            }
+
+            return hexa;
+
+        };
+
+
+        var numberToInt8 = function (n) {
+
+            return new Buffer([n]);
+
+        };
+
+
+        var numberToInt32LE = function (n) {
+
+            var buffer = new Buffer(4);
+
+            buffer.writeUInt32LE(n,0);
+
+            return buffer;
+
+        };
+
+
+        var numberToInt64LE = function (n) {
+
+           var buffer = new Buffer(8);
+
+           buffer.writeUInt32LE(n % 0xFFFFFFFFFFFFFFFF, 0);
+
+           buffer.writeUInt32LE(Math.floor(n / 0xFFFFFFFFFFFFFFFF), 4);
+
+           return buffer;
+
+        };
+
+
+        var serializeAmount = function (amount) {
+
+            return numberToInt64LE(amount * 100000000);
+
+        };
+
+
+        var hexaNotationToInt256LE = function (hexa) {
+
+            var bytes = new Array(32);
+
+            for (var i = 0, j = 31, len = hexa.length; i < len; i+=2, j--) {
+
+                bytes[j] = parseInt(hexa[i]+hexa[i+1],16);
+
+            }
+
+            return new Buffer(bytes);
+
+        };
+
+
+
+        var      OP_ADD         = 0x93;
+
+        var      OP_DUP         = 0x76;
+
+        var      OP_HASH160     = 0xa9;
+
+        var      OP_EQUALVERIFY = 0x88;
+
+        var      OP_CHECKSIG    = 0xac;
+
+        var      OP_HALT        = 0x94;
+
+        console.log(OP_ADD + "  " + OP_DUP + " " + OP_HASH160 + " " + OP_EQUALVERIFY + " " + OP_CHECKSIG + " " + OP_HALT);
+
+
+
+        var serializeTransaction = function(tr) {
+            var buffers = [];
+
+            buffers.push(numberToInt32LE(tr.version));
+
+            buffers.push(serializeInputs(tr.inputs));
+            console.log(tr.inputs);
+            buffers.push(serializeOutputs(tr.outputs));
+
+            buffers.push(numberToInt32LE(tr.lockTime));
+
+            if (tr.hashType)
+
+                buffers.push(numberToInt32LE(Number(tr.hashType)));
+
+            return Buffer.concat(buffers);
+
+        };
+
+
+        var serializeInputs = function (inputs) {
+
+            var buffers = [];
+
+
+            var inputsSize = inputs.length;
+
+            buffers.push(numberToInt8(inputsSize));
+
+
+            for (var i = 0; i < inputsSize; i++) {
+
+                var input = inputs[i];
+
+
+                buffers.push(hexaNotationToInt256LE(input.txid));
+
+                buffers.push(numberToInt32LE(input.index));
+                JSON.stringify(input.script);
+                buffers.push(compileScript(input.script));
+
+                buffers.push(numberToInt32LE(0xffffffff));
+
+            }
+
+            return Buffer.concat (buffers);
+
+        };
+
+
+        var serializeOutputs = function (outputs) {
+
+            var buffers = [];
+
+
+            var outputsSize = outputs.length;
+
+            buffers.push(numberToInt8(outputsSize));
+
+            for (var i = 0; i < outputsSize; i++) {
+
+                var output = outputs[i];
+
+                buffers.push(serializeAmount(output.amount));
+
+                buffers.push(compileScript(output.script));
+
+            }
+
+            return Buffer.concat (buffers);
+
+        };
+
+
+        var compileScript = function(program) {
+
+            var buffers = [];
+
+            var bytes = 0;
+
+            for (var i = 0, len = program.length; i < len; i++) {
+
+                var code = program[i];
+
+                var type = typeof(code);
+
+                switch (type) {
+
+                    case 'number':
+                      //console.log(code);
+                        buffers.push(numberToInt8(code));
+
+                        bytes++;
+
+                        break;
+
+                    case 'string':
+                        //console.log("string" + code);
+                        var operand = new Buffer(code, 'hex');
+                        //console.log(operand);
+                        buffers.push(numberToInt8(operand.length));
+
+                        buffers.push(operand);
+
+                        bytes += operand.length + 1
+
+                        break;
+                    case 'object':
+                      var operand = new Buffer.from(JSON.stringify(code));
+                      //console.log("object"+operand);
+                      buffers.push(numberToInt8(operand.length));
+
+                      buffers.push(operand);
+
+                      bytes += operand.length + 1
+                      break;
+
+                }
+
+            }
+
+            buffers.unshift(numberToInt8(bytes));
+            for(var m = 0; m < buffers.length; m++){
+              //console.log(buffers[m]);
+            }
+            //console.log('\n')
+            var hold = Buffer.concat(buffers);
+
+            return Buffer.concat(buffers);      //return array buffer of program
+
+        };
+
+
+        // A simple virtual machine to run a decoded P2SH (Pay to Script Hash) scripts
+
+
+
+
+        var runScript = function (program, stack, currentTransaction, currentInputIndex) {
+            var operand;
+
+            var operand1;
+
+            var operand2;
+
+            var ip = 0; // instruction pointer
+
+            var last = program[ip++];
+
+            while (ip <= last) {
+
+                var instruction = program[ip++];
+
+                switch (instruction) {
+
+                    case OP_DUP:
+
+                        operand = stack.pop();  //public Key 275... Problem no....
+
+                        stack.push(operand);
+                        //console.log(operand);
+                        stack.push(operand);
+
+                        break;
+
+
+                     case OP_ADD:
+
+                        operand1 = stack.pop().readInt32LE();
+                        operand2 = stack.pop().readInt32LE();
+
+                        stack.push(numberToInt32LE(operand1 + operand2));
+
+                        break;
+
+
+                    case  OP_HASH160:
+
+                        operand = stack.pop();  //public key 275...
+
+                        stack.push(ripemd160(sha256(operand.toString('hex'))));
+
+                        break;
+
+
+                    case  OP_EQUALVERIFY:
+
+                        //no worries
+                        operand1 = stack.pop();   //BOTH SHOULD BE RESULT TO 45...
+                        //no worries
+                        operand2 = stack.pop();
+
+                        if (! operand1.compare(operand2) == 0) return false;
+
+                        break;
+
+
+                    case  OP_CHECKSIG:
+                    console.log("nice");
+
+                        operand1 = stack.pop(); //public key
+
+                        operand2 = stack.pop(); //signature, with sighash at the end
+
+                        // operand 1 is Public Key
+
+                        var publicKey = operand1;
+
+
+                        // operand 2 contains hashType
+
+                        //var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+
+                        // operand 2 contains DER Signature
+
+                        var hashType = 1;
+                        //var hashType = operand2[operand2.length-1]; //get last byte of signature
+
+                        try{
+
+                          var signatureDER = JSON.parse(operand2);
+
+                        }catch (e){
+
+                          console.log(e);
+
+                        }
+
+                        //console.log(signatureDER);
+                        //console.log(signatureDER.toString('hex'));
+
+                        //var signature = secp256k1.signatureImport(signatureDER); // Decode a signature in DER format
+                        //signature = new Buffer(signature, 'uint8');
+
+
+                        // recover signed transaction and hash of this transaction
+                        var d = "hey";
+
+                        var hashco = sha256 (sha256 (new Buffer.from(d)));
+
+                        console.log("Outcome :: " + ecdsa.verify(hashco, signatureDER, publicKey));
+
+                        var copy = copyForSignature(currentTransaction, currentInputIndex, hashType);
+        //console.log(JSON.stringify(copy)+ " fasfdfasdf");
+        //console.log(" Copy " + JSON.stringify(copy));
+                        //console.log(signatureDER.toString('hex'));
+                        var buffer = serializeTransaction(copy);
+
+                        var hashcode = sha256 (sha256 (buffer));
+
+                        // Check signature
+                        //console.log("run " + ecdsa.verify(hashcode, signatureDER, publicKey));
+                        if (! ecdsa.verify(hashcode, signatureDER, publicKey)) return false;
+
+                        break;
+                    case OP_HALT:
+                        ip = last;
+                        break;
+
+                    default:
+
+                        var size = instruction;
+
+
+                        //size  = 72
+                        //yoooo30450221009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f2990502206b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab294501
+                        //size = 33
+                        //yoooo0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e
+                        //size = 20
+                        //yoooo4586dd621917a93058ee904db1b7a43bfc05910a
+                        //
+                        var data  = new Buffer(size);
+
+                        program.copy(data, 0, ip, size+ip);
+                        //console.log("yoooo" + data.toString('hex'));
+
+                        stack.push(data);
+
+                        ip += size;
+
+                        break;
+
+                }
+
+            }
+
+            return true;
+
+        };
+
+        var SIGHASH_ALL          = "01";
+
+        var SIGHASH_NONE         = "02";
+
+        var SIGHASH_SINGLE       = "03";
+
+        var SIGHASH_ANYONECANPAY = "80";
+
+
+        // We create a previous transaction with an output
+
+        // We skip other data that are not required for validation
+
+
+          const newUser = new user();
+
+          var privateKey = newUser.privateKey;
+          var publicKey = newUser.publicKey;
+
+          var data = "hey";
+
+          var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+          var signature = ecdsa.sign(hashcode, privateKey);//.signature;
+
+          var signatureDER = signature.toDER();
+
+          signatureDER = new Uint8Array(signatureDER);
+          signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+          console.log(ecdsa.verify(hashcode, signature, publicKey));
+          console.log("ddedd" + ecdsa.verify(sha256 (sha256 (new Buffer.from("d"))), signature, publicKey));
+          console.log("yo");
+
+        // We create a previous transaction with an output
+
+        // We skip other data that are not required for validation
+
+        var privKe = "";
+        var pubKe = "0321454dd740878e06f070f35ca238baa491d988e2749d3bf11c7b3e782c3e16b9";
+
+        publicKey = Buffer.from(publicKey).toString('hex');
+        console.log("pubkey    " + publicKey)
+        var ver = ripemd160(sha256(publicKey));
+        ver = ver.toString('hex');
+        console.log("ver   " + ver);
+
+        var previousTransaction = {
+
+            version: 1,
+
+            inputs: {}, // missing actual data here
+
+            outputs: [
+
+                {}, // missing output[0]
+
+                {
+
+                    amount: 0.09212969,
+
+                    script: [
+
+                        OP_DUP,
+
+                        OP_HASH160,
+
+                        '4586dd621917a93058ee904db1b7a43bfc05910a',
+
+                        OP_EQUALVERIFY,
+
+                        OP_CHECKSIG
+
+                    ]
+
+                }
+
+            ],
+
+            lockTime: 0
+
+        };
+
+
+        var transaction = {
+
+           version: 1,
+
+           inputs: [
+
+                {
+
+                    txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+                    index: 1,
+
+
+                    script: [
+
+                          "3045"
+
+                        + "0221"
+
+                        + "009eb819743dc981250daaaab0ad51e37ba47f7fb4ace61f6a69111850d6f29905"
+
+                        + "0220"
+
+                        + "6b6e59e1c002a4e35ba2be4d00366ea0f3e0b14c829907920705bce336ab2945" // signature
+
+                        +  SIGHASH_ALL,    // hashtype
+
+                        "0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e" // Public Key
+
+                    ]
+
+                },
+
+                {
+
+                    txid: "5b7aeedc2e82c9646408ce0588d9f98d2107062e9291af0e9e6fa372b0d7d1fb",
+
+                    index: 1,
+
+
+                    script: [
+
+                          "3045"
+
+                        + "0220"
+
+                        + "35a9e444883acaaae166d2ee1389272424ec7885f4210aaf118fee58b5683445"
+
+                        + "0221"
+
+                        + "00e40624a0df47943aa5ee63d8997dd36c5da44409ccc4dafcbfabc96a020d971c" // signature
+
+                        + SIGHASH_ALL,   // hashtype
+
+
+                        "033b18e24fb031dae396297516a54f3e46cc9902adfd1b8edea0d6a01dab0e027d" // Public Key
+
+                    ]
+
+                }
+
+           ],
+
+           outputs: [
+
+                {
+
+                    amount: 0.05580569,
+
+                    script: [
+
+                            OP_DUP,
+
+                            OP_HASH160,
+
+                            '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                            OP_EQUALVERIFY,
+
+                            OP_CHECKSIG
+
+                    ],
+
+                },
+
+                {
+
+                    amount: 0.1,
+
+                    script: [
+
+                            OP_DUP,
+
+                            OP_HASH160,
+
+                            '81a9e7d0ab008005d36c61563a178ad20a3a5224',
+
+                            OP_EQUALVERIFY,
+
+                            OP_CHECKSIG
+
+                    ],
+
+                }
+
+           ],
+
+           lockTime: 0
+
+        };
+
+
+
+
+
+
+        var dbtx = {};
+
+        dbtx["14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9"] = previousTransaction;
+
+        dbtx["9e9f1efee35b84bf71a4b741c19e1acc6a003f51ef8a7302a3dcd428b99791e4"] = transaction;
+
+
+        var copyForSignature = function(transaction, inputIndex, hashType) {
+
+            var copy = Object.assign({}, transaction);
+
+
+            var inputs = copy.inputs;
+
+            for (var i = 0, len = inputs.length; i < len; i++) {
+
+                inputs[i].script = []; // reset script to nothing
+
+            }
+
+
+            var currentInput = inputs[inputIndex];
+
+
+            var previousTransaction =  dbtx[currentInput.txid];
+
+            var previousOutput =previousTransaction.outputs[currentInput.index];
+
+
+            currentInput.script = previousOutput.script;
+
+
+            copy.hashType = hashType;
+
+            return copy;
+
+        };
+
+
+        var validateInput = function (transaction, inputIndex) {
+
+            var stack = [];
+
+
+            var input = transaction.inputs[inputIndex];
+
+            var previousTransaction =  dbtx[input.txid];
+
+            var previousOutput =previousTransaction.outputs[input.index];
+
+
+            var program1 = compileScript(input.script);
+
+            var program2 = compileScript(previousOutput.script);
+
+
+            var result = runScript (program1, stack, transaction, inputIndex);
+
+            if (result) result = runScript (program2, stack, transaction, inputIndex);
+
+            //console.log(stack);
+
+            return result;
+
+        };
+        var currentTransaction = transaction;
+
+        var currentInputIndex  = 0;
+
+        console.log("lllll" + validateInput(currentTransaction, currentInputIndex));
+        var y = [
+
+                OP_DUP,
+
+                OP_HASH160,
+
+                '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                OP_EQUALVERIFY,
+
+                OP_CHECKSIG
+
+        ];
+
+        var x = [
+
+                OP_DUP,
+
+                OP_HASH160,
+
+                '4753945f3b34d6ca3fedcf41bf499c13d20bfec4',
+
+                OP_EQUALVERIFY,
+
+                OP_CHECKSIG
+
+        ];
+
+
+        jake = "0252efbfc0517e8ba2a2e66c2534ec33135168d6f6bc93325e0b16434a14d35778";
+        var val = ripemd160(sha256(jake));
+        //console.log("fuck jake ; " + val.toString('hex'));
+
+        module.exports = validateInput;
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+        flag = true;
+
+      }else{
+
+        var user_input = JSON.parse(client_Data);
+
+        const protocol = user_input.protocol;
+
+        var      OP_ADD         = 0x93;
+
+        var      OP_DUP         = 0x76;
+
+        var      OP_HASH160     = 0xa9;
+
+        var      OP_EQUALVERIFY = 0x88;
+
+        var      OP_CHECKSIG    = 0xac;
+
+        var      OP_HALT        = 0x94;
+
+        switch (protocol) {
+          case 1: //CTO
+            var amount = user_input.amount;
+            var pub_key = user_input.pub_key;
+
+
+            var new_Transaction = new transaction(Date.now(), count);
+
+            try{
+
+              var hash = new_Transaction.ripemd160(new_Transaction.sha256(pub_key));
+
+            } catch (e){
+
+              console.log('FAILED to Hash :: ' + e);
+
+            }
+
+            var pub_key_address = hash.toString('hex');
+
+
+            var output_script = [OP_DUP, OP_HASH160, pub_key_address, OP_EQUALVERIFY, OP_CHECKSIG];
+
+
+            new_Transaction.output(amount, output_script);
+
+            console.log(pub_key + " :: " + JSON.stringify(new_Transaction));
+
+            try{
+
+               add_To_Pool(new_Transaction);
+
+            } catch (e){
+
+              console.log("Send Transaction FAILED :: " + e);
+
+            }
+
+            break;
+          case 2: //P2P
+            const public_key = user_input.pub_key;
+            const priv_key = user_input.priv_key;
+            const amounts = user_input.amount;
+            const dest_address = user_input.dest_address;
+
+            try{
+
+              var pub_hash = ripemd160(sha256(public_key));
+
+            } catch (e){
+
+              console.log('FAILED to Hash :: ' + e);
+
+            }
+
+            var pub_address_hash = pub_hash.toString('hex');
+            console.log(pub_hash.toString('hex'));
+
+            var payer_wallet = get_User_Wallet(pub_address_hash);
+
+            const OODLE = get_OODLE(payer_wallet, amounts);
+
+            if(OODLE != 0){
+              console.log("Oodle to be spent :: " + OODLE);
+
+              var funds_F_T = blockChain.blockchain[OODLE.block].data.transaction_Pool[OODLE.index];
+
+              var new_Transactions = new transaction(Date.now(), count);
+
+              try{
+
+                var pub_hash = new_Transactions.ripemd160(new_Transactions.sha256(dest_address));
+
+              } catch (e){
+
+                console.log('FAILED to Hash :: ' + e);
+
+              }
+
+              var pub_verify = pub_hash.toString('hex');
+
+
+              var output_script = [OP_DUP, OP_HASH160, pub_verify, OP_EQUALVERIFY, OP_CHECKSIG];
+
+
+
+
+              //var publicKey = "";
+
+              //var data = "hey";
+
+              //var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+              //var signature = ecdsa.sign(hashcode, priv_key);//.signature;
+
+
+            // We create a previous transaction with an output
+
+            // We skip other data that are not required for validation
+
+            //var ver = ripemd160(sha256(public_key));
+            //ver = ver.toString('hex');
+
+            //var input_script = [signature, publicKey];
+
+            //new_Transactions.input(count, input_script);
+          //	new_Transactions.output(amounts, output_script);
+
+
+          //	console.log(public_key + " :: " + JSON.stringify(new_Transactions));
+
+
+
+            var pu_key = new Buffer.from(public_key, 'hex');
+            var pr_key = new Buffer.from(priv_key, 'hex');
+
+
+            var data = "hey";
+
+            var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+            var signature = ecdsa.sign(hashcode, pr_key);//.signature;
+
+            var signatureDER = signature.toDER();
+
+            signatureDER = new Uint8Array(signatureDER);
+            signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+            console.log(ecdsa.verify(hashcode, signature, pu_key));
+            //console.log("ddedd" + ecdsa.verify(sha256 (sha256 (new Buffer.from("d"))), signature, pu_key));
+            //console.log("yo");
+
+          // We create a previous transaction with an output
+
+          // We skip other data that are not required for validation
+
+          //var privKe = "";
+          //var pubKe = "0321454dd740878e06f070f35ca238baa491d988e2749d3bf11c7b3e782c3e16b9";
+
+          console.log("pubkey    " + public_key)
+          var ver = ripemd160(sha256(public_key));
+          ver = ver.toString('hex');
+          console.log("ver   " + ver);
+
+          var previousTransaction = {
+
+              version: 1,
+
+              inputs: {}, // missing actual data here
+
+              outputs: [
+
+                  {}, // missing output[0]
+
+                  {
+
+                      amount: 0.09212969,
+
+                      script: [
+
+                          OP_DUP,
+
+                          OP_HASH160,
+
+                          ver,
+
+                          OP_EQUALVERIFY,
+
+                          OP_CHECKSIG
+
+                      ]
+
+                  }
+
+              ],
+
+              lockTime: 0
+
+          };
+
+          var transactions = {
+
+             version: 1,
+
+             inputs: [
+
+                  {
+
+                      txid: "14e5c51d3bc1cf0d29f2457d61fbf8d6567883e0711f9877795783d2105b50c9",
+
+                      index: 1,
+
+
+                      script: [
+
+                            signature,    // hashtype
+
+          //"0275e9b1369179c24935337d597a06df0e388b53e8ac3f10ee426431d1a90c1b6e"
+                          public_key,//+ SIGHASH_ALL, // Public Key
+
+                      ]
+                  }
+
+             ],
+
+             outputs: [
+
+                  {
+
+                      amount: 0.05580569,
+
+                      script: [
+
+                              OP_DUP,
+
+                              OP_HASH160,
+
+                              ver,
+
+                              OP_EQUALVERIFY,
+
+                              OP_CHECKSIG
+
+                      ],
+
+                  }
+
+             ],
+
+             lockTime: 0
+
+          };
+
+
+
+
+
+            try{
+              console.log("Trans" + transactions);
+
+              validate_Transaction(transactions, previousTransaction, 0);
+              //add_To_Pool(new_Transactions);
+
+            } catch (e){
+
+              console.log("Send Transaction FAILED :: " + e);
+
+            }
+
+
+            }else{
+              //Insufficient Funds
+              console.log("Insufficient Funds");
+            }
+
+            break;
+          case 3: //MEM
+          //write entire history of chain to web client to display on webpage
+            socket.write(JSON.stringify(blockChain.blockchain));
+            console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+            break;
+          case 4:
+            break;
+          default:
+            console.log("Invalid Protocol Provided");
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+      var pub_hash = ripemd160(sha256(public_key));
+
+    } catch (e){
+
+      console.log('FAILED to Hash :: ' + e);
+
+    }
+
+    var pub_address_hash = pub_hash.toString('hex');
+    console.log(pub_hash.toString('hex'));
+
+    var payer_wallet = get_User_Wallet(pub_address_hash);
+
+    const OODLE = get_OODLE(payer_wallet, amounts);
+
+    if(OODLE != 0 && Array.isArray(OODLE) != true){
+      console.log("Oodle to be spent :: " + OODLE);
+
+      var funds_F_T = blockChain.blockchain[OODLE.block].data.transaction_Pool[OODLE.index];
+
+      var new_Transactions = new transaction(Date.now(), count);
+
+      try{
+
+        //var pub_hash = new_Transactions.ripemd160(new_Transactions.sha256(dest_address));
+
+      } catch (e){
+
+        console.log('FAILED to Hash :: ' + e);
+
+      }
+
+      var pub_verify = pub_hash.toString('hex');
+
+
+      var output_script = [OP_DUP, OP_HASH160, dest_address, OP_EQUALVERIFY, OP_CHECKSIG];
+
+
+
+      var pu_key = new Buffer.from(public_key, 'hex');
+      var pr_key = new Buffer.from(priv_key, 'hex');
+
+      var data = [OP_DUP, OP_HASH160, pub_address_hash, OP_EQUALVERIFY, OP_CHECKSIG];
+
+      var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+      var signature = ecdsa.sign(hashcode, pr_key);//.signature;
+
+
+    // We create a previous transaction with an output
+
+    // We skip other data that are not required for validation
+
+    var ver = ripemd160(sha256(public_key));
+    ver = ver.toString('hex');
+
+    var input_script = [signature, public_key];
+
+    new_Transactions.input(count, input_script);
+    new_Transactions.output(amounts, output_script);
+
+
+  //	console.log(public_key + " :: " + JSON.stringify(new_Transactions));
+
+
+
+
+
+
+
+    var signatureDER = signature.toDER();
+
+    signatureDER = new Uint8Array(signatureDER);
+    signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+    console.log(ecdsa.verify(hashcode, signature, pu_key));
+    //console.log("ddedd" + ecdsa.verify(sha256 (sha256 (new Buffer.from("d"))), signature, pu_key));
+    //console.log("yo");
+
+  // We create a previous transaction with an output
+
+  // We skip other data that are not required for validation
+
+  //var privKe = "";
+  //var pubKe = "0321454dd740878e06f070f35ca238baa491d988e2749d3bf11c7b3e782c3e16b9";
+
+  console.log("pubkey    " + public_key)
+  var ver = ripemd160(sha256(public_key));
+  ver = ver.toString('hex');
+  console.log("ver   " + ver);
+
+
+
+
+
+
+    try{
+      //console.log("Trans" + transactions);
+
+      if(validate_Transaction(new_Transactions, funds_F_T, 0)){
+        if(add_To_Pool(new_Transactions)){
+          destroy_OODLE(OODLE.block, OODLE.index, amounts);
+        }
+      }else{
+        console.log("Transaction was INVALID");
+      }
+
+    } catch (e){
+
+      console.log("Validate Transaction FAILED :: " + e);
+
+    }
+
+
+  }else if(Array.isArray(OODLE)){
+      //Insufficient Funds
+
+      console.log("Insufficient Funds");
+    }
+
+    break;
+  case 3: //MEM
+  //write entire history of chain to web client to display on webpage
+    socket.write(JSON.stringify(blockChain.blockchain));
+    console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+    break;
+  case 4:
+    break;
+  default:
+    console.log("Invalid Protocol Provided");
+}
+/////}
+
+if(count - 1  == POOL_REQ){
+count = 0;
+for(var i = 0; i < POOL_REQ; i++){
+
+  if(blockChain.addNewBlock(new blck(index++, { transaction_Pool }))){
+    console.log(chalk.green("Added new block to chain"));
+    newUser.coin += blockChain.blockchain[i].coin.amount;
+    blockChain.blockchain[i].coin.amount = 0;
+  }
+}
+transaction_Pool = [];
+
+flag = true;
+}
+
+if(flag){
+try{
+  for(var i = 0; i < blockChain.blockchain.length; i++){
+    console.log(chalk.green("\nBlock :: " + i + " " + JSON.stringify(blockChain.blockchain[i]) + "\n"));
+  }
+
+  console.log("Nodes Earned Coin :: " + newUser.coin);
+  socket.write(JSON.stringify(blockChain.blockchain));
+
+}catch (exception){
+  console.log(exception);
+}
+
+//echo data
+var is_kernel_buffer_full=true ;//= socket.write('Node : ' + server.address().port + ' successfully added Block :: ' + JSON.stringify(blockChain, null, 4));
+if(is_kernel_buffer_full){
+  console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
+  flag = false;
+}else{
+  socket.pause();
+}
+}
+});
+
+socket.on('rand',function(data){
+console.log("new data: " + data)
+});
+
+socket.on('drain',function(){
+console.log('write buffer is empty now .. u can resume the writable stream');
+socket.resume();
+});
+
+socket.on('error',function(error){
+console.log('Error : ' + error);
+});
+
+socket.on('timeout',function(){
+console.log('Socket timed out !');
+socket.end('Timed out!');
+// can call socket.destroy() here too.
+});
+
+socket.on('end',function(data){
+console.log('Socket ended from other end!');
+console.log('End data : ' + data);
+});
+
+socket.on('close',function(error){
+var bread = socket.bytesRead;
+var bwrite = socket.bytesWritten;
+console.log('Bytes read : ' + bread);
+console.log('Bytes written : ' + bwrite);
+console.log('Socket closed!');
+if(error){
+console.log('Socket was closed coz of transmission error');
+}
+});
+
+setTimeout(function(){
+var isdestroyed = socket.destroyed;
+console.log('Socket destroyed:' + isdestroyed);
+socket.destroy();
+},1200000);
+
+});
+
+
+//
+//END CONNECT
+//
+
+
+
+
+// emits when any error occurs -> calls closed event immediately after this.
+server.on('error',function(error){
+console.log('Error: ' + error);
+});
+
+//emits when server is bound with server.listen
+server.on('listening',function(){
+console.log('Port :: ' + server.address().port);
+});
+
+server.maxConnections = 10;
+
+//static port allocation
+server.listen(2222);
+
+// for dyanmic port allocation
+//server.listen(function(){
+//var address = server.address();
+//var port = address.port;
+//var family = address.family;
+//var ipaddr = address.address;
+//console.log('Server is listening at port' + port);
+//console.log('Server ip :' + ipaddr);
+//console.log(ipaddr);
+//console.log('Server is IP4/IP6 : ' + family);
+//});
+
+
+
+var islistening = server.listening;
+
+if(islistening){
+console.log(chalk.green('Server STATUS :: Listening'));
+}else{
+console.log(chalk.red('Server STATUS :: Not Listening'));
+}
+
+setTimeout(function(){
+server.close();
+},5000000);
+
+
+
+
+
+
+
+
+
+
+
+
+if (isMainThread) {
+  const worker = new Worker(__filename);
+  worker.on("message", console.log);
+  worker.on("error", console.log);
+  worker.on("exit", console.log);
+
+  setTimeout(() => {
+    console.log("Worker is gonna be terminated");
+    // replace worker.terminate(); with something like
+    //worker.postMessage({ exit: true });
+    worker.postMessage({ port: port2 }, [port2], {exit:true});
+    // maybe add another setTimeout with worker.terminate() just in case?
+  }, 2000);
+} else {
+  (async () => {
+    // listen for message and do things according to passed value
+    port1.on('message', (message) => {
+      console.log('message from worker:', message);
+      // worker threads do not have multiple listeners available for passing different event,
+      // therefore add one onMessage listener, and pass an object with commands/data from main thread
+      if (value.exit) {
+        // clean up
+        console.log("doing cleanup");
+        process.exit(0);
+      }
+    });
+    // add other logic for receiving messages from main thread
+    console.log("Mining");
+    // This thread will spawn its own dependencies, so I want to listen here the terminate signal from
+    // mainThread to close the dependencies of this worker
+    // Sth like the following will be awesome
+    // thread.on('exit', () => { /* close dependencies */ })
+
+    if(blockChain.addNewBlock(new blck(index++, { transaction_Pool }))){
+      console.log(chalk.green("Added new block to chain"));
+      newUser.coin += blockChain.blockchain[i].coin.amount;
+      blockChain.blockchain[i].coin.amount = 0;
+    }
+
+    // Simulate a task which takes a larger time than MainThread wants to wait
+    //await new Promise((resolve) => {
+    //  setTimeout(resolve, 10000);
+    //});
+  })();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow" style="width: 100%;">
+              <div class="row" style="width: 100%;">
+                <div class="col-sm-4">
+              <h1 class="mr-3" style="color: white">OC</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+              <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100">Wallet</h6>
+                <small>Since 2020</small>
+              </div>
+            </div>
+            <div class="col-sm-5">
+            </div>
+            <div class="col-sm-3">
+              <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 0px">
+                <div class="btn-group mr-2" style="float: right;">
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Share</button>
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Export</button>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" style="color: white">
+                  <span data-feather="calendar"></span>
+                  This week
+                </button>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div>
+
+
+
+
+
+
+
+
+
+          onBeforePaste: function (pastedValue, opts) {
+          var processedValue = pastedValue;
+
+          //do something with it
+
+          return processedValue;
+          }
+          });
+          });
+          btn.addEventListener('click', function(){
+              socket.emit('chat',{
+                  message: message.value,
+                  handle: handle.value
+              });
+          });
+            </script>
+            <style>
+            body{
+              height: 100%;
+              font-family: ;/*courier garamond candara*/
+            }
+            .fa {
+            padding: 20px;
+            font-size: 24px;
+            width: ;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50%;
+            color: black;
+          }
+          .alignleft {
+              float: left;
+              margin-right: 15px;
+          }
+          .alignright {
+              float: right;
+              margin-left: 15px;
+          }
+          .aligncenter {
+              display: block;
+              margin: 0 auto 15px;
+          }
+          a:focus { outline: 0 solid }
+          img {
+              max-width: 100%;
+              height: auto;
+          }
+          .fix { overflow: hidden }
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+              margin: 0 0 15px;
+              font-weight: 700;
+          }
+          html,
+          body { height: 100% }
+
+          a {
+              -moz-transition: 0.3s;
+              -o-transition: 0.3s;
+              -webkit-transition: 0.3s;
+              transition: 0.3s;
+              color: #333;
+          }
+          a:hover { text-decoration: none }
+
+
+
+          .search-box{margin:80px auto;position:absolute;}
+          .caption{margin-bottom:50px;}
+          .loginForm input[type=text], .loginForm input[type=password]{
+            margin-bottom:10px;
+          }
+          .loginForm input[type=submit]{
+            background:#fb044a;
+            color:#fff;
+            font-weight:700;
+
+          }
+
+          /*
+          body {
+              padding: 2.5em 2em 0em;
+              background: #f5f7f9;
+                  font-size: 1.5em;
+                  color: #346;
+                  font-family: Signika, -apple-system, sans-serif;
+          }*/
+            </style>
+          </head>
+          <body class="bg-light">
+                  <%- header %>
+
+
+            <div class="container h-100 col-sm-8" style="margin-top: 3%">
+              <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+                <h1 class="mr-3" style="color: white">Oodle</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+                <div class="lh-100">
+                  <h6 class="mb-0 text-white lh-100">OodleCoin</h6>
+                  <small>Since 2020</small>
+                </div>
+              </div>
+            <div class="wrapper shadow-sm p-3 mb-5 bg-white rounded">
+                <form id="form1" method="post" class="needs-validation h-100" oninput='pwdConf.setCustomValidity(password.value != pwdConf.value ? "Passwords do not match." : "")'>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-10">
+                    <label for="email">Sender:</label>
+                    <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 0280fc8670b24f3..." name="pub_key" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                    <p></p>
+                    <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 15sJ9187WoRaLiDusQrcf..." name="priv_key" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                  </div>
+                  <div class="col-sm-1">
+                    <label for="email">Amount:</label>
+                    <input type="number" step="0.00001" class="form-control" id="uname" minLength="0" maxlength="5" placeholder="0" name="amount" required>
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                  </div>
+                  </div>
+                  </div>
+                  <div class="form-group">
+                  <label for="email">Recipient:</label>
+                  <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 0280fc8670b24f3..." name="dest_address" required>
+                  <div class="valid-feedback">Valid.</div>
+                  <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+                  <div class="form-group form-check">
+                  <div class="row">
+                    <div class="col-md- float-right mx-auto">
+                                  <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModalCenter">Send</button>
+                </div>
+                </div>
+                </form>
+              </div>
+                <!-- Copyright -->
+                <div class="footer-copyright text-center py-3">
+                  <hr class="w-25">
+                  <div class="footer-copyright text-center py-3">Not a user yet? <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><em>Generate</em></a>
+                  </div>
+                </div>
+                <!-- Copyright -->
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content modal-lg">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Your User Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+
+
+
+
+                          /////}
+
+                          if(count - 1  == POOL_REQ){
+                            count = 0;
+                            for(var i = 0; i < POOL_REQ; i++){
+
+                              if(blockChain.addNewBlock(new blck(index++, { transaction_Pool }))){
+                                console.log(chalk.green("Added new block to chain"));
+                                //newUser.coin += blockChain.blockchain[i].coin.amount;
+                                blockChain.blockchain[i].coin.amount = 0;
+                              }
+                            }
+                            index = index + 1;
+                            transaction_Pool = [];
+
+                            flag = true;
+                          }
+
+                          if(flag){
+                            try{
+
+
+
+
+
+
+                            console.log("Insufficient Funds");
+                          }
+
+                          break;
+                        case 3: //MEM
+                        //write entire history of chain to web client to display on webpage
+                          socket.write(JSON.stringify(blockChain.blockchain));
+                          console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+                          break;
+                        case 4: //WALLET
+                        //give users aggregated wallet to the client
+                          var wallet = get_User_Wallet_Transactions(ripemd160(sha256(wallet_Address)).toString('hex'));
+
+                          wallet.sort((a, b) => (a.output.amount > b.output.amount) ? 1 : -1);
+
+                          socket.write(JSON.stringify(wallet));
+                          console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+                          break;
+                        case 5: //RESET
+                        //emmitted when node wins block
+
+                          break;
+                        case 6: //NEW
+                        //EMMITTED when node joins network and/or new nodes are made known to other nodes on the network
+                        default:
+                          console.log("Invalid Protocol Provided");
+                      }
+                    /////}
+
+                    if(count - 1  == POOL_REQ){
+                      count = 0;
+
+                      if (isMainThread) {
+                        const worker = new Worker('./thread.js');
+                        worker.on("message", console.log);
+                        worker.on("error", console.log);
+                        worker.on("exit", console.log);
+
+                        var messages = {
+                          //protocol varies on curr situation
+                          protocol: 3,
+                          //intially set to false, subject to change
+                          exit: false,
+                          //contains any data that needs to be shared between the two
+                          data: {
+                            index: 3,
+                            //could be full or null depending
+                            transaction_Pool: 2//transaction_Pool
+                          }
+                        };
+
+                        var obj = {
+                          name: "obi"
+                        };
+
+                        //pseudo array - transaction_Pool
+                        var typed = [obj, obj, obj];
+
+                        //convert to string
+                        typed = JSON.stringify(typed);
+                        //encode utf-8 to Uint8Array
+                        var enc = new TextEncoder(); // always utf-8
+                        typed = enc.encode(typed);
+
+                        //convert to uint32 array type
+                        typed = new Int32Array(typed);
+
+                        //create shared buffer and allocate required bytes
+                        const sharedBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * typed.length);
+                        var arr = new Int32Array(sharedBuffer);
+
+                        //instantiate a shared array buffer with a typed int32 array
+                        //use text encoder to encode individual array elements to their utf8 values
+                        //dynamically asign said utf8 values to typed array buffer
+
+                        //for(var i = 0; i < typed.length; i++){
+                          //arr[i] = enc.encode(typed[i]);
+                        //}
+
+                        //fill arr with array elements
+                        for(var i = 0; i < typed.length; i++){
+                          arr[i] = typed[i];
+                        }
+
+                      // logs:
+                      // a[0] = 0
+                      // a[1] = 1
+                      // a[2] = 2
+                      // a[3] = 3
+
+                        //to retrieve values use text decoder to return to normal string types
+                        //var dec = new TextDecoder("utf-8");
+                        //var news = dec.decode(arr).split(" ");
+                        //console.log(news);
+                        //var temp = new Int32Array();
+                        //temp = arr;
+                        console.log(arr);
+                        //arr = typed;
+                        worker.postMessage({arr})
+                        setTimeout(() => {
+                          console.log("Worker is gonna be terminated");
+                          // replace worker.terminate(); with something like
+                          console.log("buff " +arr[0]);
+                          console.log(arr);
+
+                          worker.postMessage({ exit: true });
+                          // maybe add another setTimeout with worker.terminate() just in case?
+                        }, 5000);
+                      } else {
+
+                      }
+
+
+
+
+
+                      let blChain= require('../../models/blockchain')
+                      let blck = require('../../models/block')
+
+                      const { Worker, isMainThread, parentPort } = require("worker_threads");
+
+                      if (isMainThread) {
+
+                      } else {
+                        (async () => {
+                          // listen for message and do things according to passed value
+                          parentPort.on("message", (value) => {
+                            // worker threads do not have multiple listeners available for passing different event,
+                            // therefore add one onMessage listener, and pass an object with commands/data from main thread
+                            console.log(value.arr);
+                            if(value.exit){
+                              console.log("doing cleanup");
+                              process.exit(0);
+                            }else{
+                                    value.arr[0] = 3;
+                                    console.log(value.arr[0])
+                            }
+                          });
+                          // add other logic for receiving messages from main thread
+
+                          console.log("I am the worker");
+
+                          console.log()
+
+                          // This thread will spawn its own dependencies, so I want to listen here the terminate signal from
+                          // mainThread to close the dependencies of this worker
+                          // Sth like the following will be awesome
+                          // thread.on('exit', () => { /* close dependencies */ })
+
+                          // Simulate a task which takes a larger time than MainThread wants to wait
+                          await new Promise((resolve) => {
+                            setTimeout(resolve, 10000);
+                          });
+                        })();
+                      }
+
+
+
+
+
+
+
+
+                          if (isMainThread) {
+                            const worker = new Worker('./threads/thread.js');
+                            worker.on("message", console.log);
+                            worker.on("error", console.log);
+                            worker.on("exit", console.log);
+
+                            var messages = {
+                              //protocol varies on curr situation
+                              protocol: 3,
+                              //intially set to false, subject to change
+                              exit: false,
+                              //contains any data that needs to be shared between the two
+                              data: {
+                                index: 3,
+                                //could be full or null depending
+                                transaction_Pool: 2//transaction_Pool
+                              }
+                            };
+
+                            var obj = {
+                              name: "obi"
+                            };
+
+                            //pseudo array - transaction_Pool
+                            var typed = [obj, obj, obj];
+
+                            //convert to string
+                            typed = JSON.stringify(typed);
+                            //encode utf-8 to Uint8Array
+                            var enc = new TextEncoder(); // always utf-8
+                            typed = enc.encode(typed);
+
+                            //convert to uint32 array type
+                            typed = new Int32Array(typed);
+
+                            //create shared buffer and allocate required bytes
+                            const sharedBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * typed.length);
+                            var arr = new Int32Array(sharedBuffer);
+
+                            //instantiate a shared array buffer with a typed int32 array
+                            //use text encoder to encode individual array elements to their utf8 values
+                            //dynamically asign said utf8 values to typed array buffer
+
+                            //for(var i = 0; i < typed.length; i++){
+                              //arr[i] = enc.encode(typed[i]);
+                            //}
+
+                            //fill arr with array elements
+                            for(var i = 0; i < typed.length; i++){
+                              arr[i] = typed[i];
+                            }
+
+                          // logs:
+                          // a[0] = 0
+                          // a[1] = 1
+                          // a[2] = 2
+                          // a[3] = 3
+
+                            //to retrieve values use text decoder to return to normal string types
+                            //var dec = new TextDecoder("utf-8");
+                            //var news = dec.decode(arr).split(" ");
+                            //console.log(news);
+                            //var temp = new Int32Array();
+                            //temp = arr;
+                            console.log(arr);
+                            //arr = typed;
+                            worker.postMessage({arr})
+                            setTimeout(() => {
+                              console.log("Worker is gonna be terminated");
+                              // replace worker.terminate(); with something like
+                              console.log("buff " +arr[0]);
+                              console.log(arr);
+
+                              worker.postMessage({ exit: true });
+                              // maybe add another setTimeout with worker.terminate() just in case?
+                            }, 5000);
+                          } else {
+                          let blChain= require('../../models/blockchain')
+                          let blck = require('../../models/block')
+
+                          const { Worker, isMainThread, parentPort } = require("worker_threads");
+
+                          if (isMainThread) {
+
+                          } else {
+                            (async () => {
+                              // listen for message and do things according to passed value
+                              parentPort.on("message", (value) => {
+                                // worker threads do not have multiple listeners available for passing different event,
+                                // therefore add one onMessage listener, and pass an object with commands/data from main thread
+                                console.log(value.arr);
+                                if(value.exit){
+
+                                  console.log("doing cleanup");
+                                  process.exit(0);
+                                }else{
+                                        value.arr[0] = 3;
+                                        console.log(value.arr[0])
+                                }
+                              });
+                              // add other logic for receiving messages from main thread
+
+                              console.log("I am the worker");
+
+                              console.log()
+
+                              // This thread will spawn its own dependencies, so I want to listen here the terminate signal from
+                              // mainThread to close the dependencies of this worker
+                              // Sth like the following will be awesome
+                              // thread.on('exit', () => { /* close dependencies */ })
+
+                              // Simulate a task which takes a larger time than MainThread wants to wait
+                              await new Promise((resolve) => {
+                                setTimeout(resolve, 10000);
+                              });
+                            })();
+                          }
+
+                          }
+
+
+
+
+
+
+-------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//https://gist.github.com/sid24rane/2b10b8f4b2f814bd0851d861d3515a10
+//
+
+const chalk = require('chalk');
+var net = require('net');
+var stream = require('stream');
+const secureRandom = require('secure-random');
+var EC = require('elliptic').ec;
+const sha256 = require('js-sha256');
+const ripemd160 = require('ripemd160');
+const bs58 = require('bs58')
+var crypto = require('crypto');
+var secp256k1 = require('secp256k1');
+var ecdsa = new EC('secp256k1');
+const path = require('path')
+
+const { Worker, isMainThread, parentPort } = require("worker_threads");
+
+
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+
+// Create SocketIO instance, connect
+
+var client = require("socket.io-client");
+var socket = client.connect("http://localhost:3000");
+socket.emit("test", "foo");
+
+    // Add a connect listener
+    socket.on('connect',function() {
+      console.log('Client has connected to the server!');
+    });
+    // Add a connect listener
+    socket.on('message',function(data) {
+      console.log('Received a message from the server!',data);
+    });
+    // Add a disconnect listener
+    socket.on('disconnect',function() {
+      console.log('The client has disconnected!');
+    });
+
+    // Sends a message to the server via sockets
+    function sendMessageToServer(message) {
+      socket.send(message);
+    };
+
+// Create and initialize EC context
+// (better do it once and reuse it)
+var ecdsa = new EC('secp256k1');
+
+let blChain= require('../models/blockchain')
+let blck = require('../models/block')
+let user = require('../models/User')
+let transaction = require('../models/Transaction')
+let isValidated = require('../virtual_machine/interpreter')
+//let wallet = require('./models/Wallet')
+//let transaction = require('./models/Transaction')
+
+//let interpreter = require('./virtual_machine/interpreter')
+
+let chain = new blChain;
+
+var blockChain = chain;
+
+console.log(blockChain);
+const newUser = new user();
+
+const POOL_REQ = process.env.POOL_REQ;
+const DNS_PORT = process.env.DNS_PORT;
+console.log("POOL REQ "  + POOL_REQ);
+//POOL of all current transactions before block processing, stored in ram
+var transaction_Pool = [POOL_REQ];
+var known_Nodes = [];
+
+
+var count = 0;
+var index = 0;
+var flag = false;
+
+//*************************************************************************************************************************************
+// BEGIN CLIENT SIDE TCP CONNECTION TO DNS
+//*************************************************************************************************************************************
+
+var server = net.createServer();
+
+var client = net.connect(1234, 'localhost', function() {
+  console.log(chalk.green("NODE SUCCESSFULLY CONNECTED TO DNS"));
+});
+client.on('error', function(ex) {
+  //console.log(chalk.red("NODE FAILED TO CONNECT TO DNS"));
+  //console.log(ex);
+});
+
+client.on('data', (data) => {
+  console.log(data.toString());
+  client.end();
+});
+client.on('close', function() {
+       console.log('connection got closed, will try to reconnect');
+         client.end();
+       });
+client.on('end' , function(){
+      console.log('Requested an end to the TCP connection');
+       });
+
+//emitted when server closes ...not emitted until all connections closes.
+server.on('close',function(){
+  console.log('Server closed !');
+});
+
+//*************************************************************************************************************************************
+// END CLIENT SIDE TCP CONNECTION TO DNS
+//*************************************************************************************************************************************
+
+// emitted when new client connects
+server.on('connection',function(socket){
+  //console.log(cope(7));
+//this property shows the number of characters currently buffered to be written. (Number of characters is approximately equal to the number of bytes to be written, but the buffer may contain strings, and the strings are lazily encoded, so the exact number of bytes is not known.)
+//Users who experience large or growing bufferSize should attempt to "throttle" the data flows in their program with pause() and resume().
+
+  console.log('Buffer size : ' + socket.bufferSize);
+
+  console.log('---------server details -----------------');
+
+  var address = server.address();
+  var port = address.port;
+  var family = address.family;
+  var ipaddr = address.address;
+  console.log('Server is listening at port ' + port);
+  console.log('Server ip :' + ipaddr);
+  console.log('Server is IP4/IP6 : ' + family);
+
+  var lport = socket.localPort;
+  var laddr = socket.localAddress;
+  console.log('Server is listening at LOCAL port ' + lport);
+  console.log('Server LOCAL ip : ' + laddr);
+
+  console.log('------------remote client info --------------');
+
+  var rport = socket.remotePort;
+  var raddr = socket.remoteAddress;
+  var rfamily = socket.remoteFamily;
+
+  console.log('REMOTE Socket is listening at port ' + rport);
+  console.log('REMOTE Socket ip : ' + raddr);
+  console.log('REMOTE Socket is IP4/IP6 : ' + rfamily);
+
+  console.log('--------------------------------------------')
+//var no_of_connections =  server.getConnections(); // sychronous version
+server.getConnections(function(error,count){
+  console.log('Number of concurrent connections to the server : ' + count);
+});
+
+socket.setEncoding('utf8');
+
+socket.setTimeout(800000,function(){
+  // called after timeout -> same as socket.on('timeout')
+  // it just tells that soket timed out => its ur job to end or destroy the socket.
+  // socket.end() vs socket.destroy() => end allows us to send final data and allows some i/o activity to finish before destroying the socket
+  // whereas destroy kills the socket immediately irrespective of whether any i/o operation is goin on or not...force destry takes place
+  console.log('Socket timed out');
+  socket.end()
+});
+
+var chain = {};
+
+if(blockChain.blockchain.length != 0){
+  try{
+
+    //socket.write(JSON.stringify(blockChain.blockchain));
+
+  }catch (e){
+
+    console.log(e);
+
+  }
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc used to add a new or unknown node to the node pool stored in RAM
+  * @param string protocol - custom protocol request
+  * @param number port - the new nodes port
+  * @param number ip - new nodes ip address
+  * @param string family - new nodes family
+  * @return obj - the new node
+*/
+
+function new_Node(protocol, port, ip, family){
+  var obj = {protocol, port, ip, family};
+  return obj;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc helper function to determine, conclusively, if an object is empty or non-empty
+  * @param object scoreData - object to be tested
+  * @return bool - success or failure
+*/
+
+function isEmpty(scoreData) {
+  for(var prop in scoreData) {
+    if(scoreData.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc compares two objects in several ways to conclusively determine if they are or are not equal
+  * @param object x
+  * @param object y
+  * @return bool - success or failure
+*/
+
+function object_equals( x, y ) {
+  if ( x === y ) return true;
+    // if both x and y are null or undefined and exactly the same
+
+  if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+    // if they are not strictly equal, they both need to be Objects
+
+  if ( x.constructor !== y.constructor ) return false;
+    // they must have the exact same prototype chain, the closest we can do is
+    // test there constructor.
+
+  for ( var p in x ) {
+    if ( ! x.hasOwnProperty( p ) ) continue;
+      // other properties were tested using x.constructor === y.constructor
+
+    if ( ! y.hasOwnProperty( p ) ) return false;
+      // allows to compare x[ p ] and y[ p ] when set to undefined
+
+    if ( x[ p ] === y[ p ] ) continue;
+      // if they have the same strict value or identity then they are equal
+
+    if ( typeof( x[ p ] ) !== "object" ) return false;
+      // Numbers, Strings, Functions, Booleans must be strictly equal
+
+    if ( ! object_equals( x[ p ],  y[ p ] ) ) return false;
+      // Objects and Arrays must be tested recursively
+  }
+
+  for ( p in y )
+    if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) )
+      return false;
+        // allows x[ p ] to be set to undefined
+
+  return true;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc function leverages crypto module to hash buffer according to sha-256 algo
+  * @param buffer buffer - temp bytes
+  * @return digested hash
+*/
+
+var sha256 = function(buffer) {
+
+    var f = crypto.createHash("SHA256");
+
+    var h = f.update(buffer);
+
+    return h.digest();
+
+};
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc function leverages crypto module to hash buffer according to ripe-160 algo
+  * @param buffer buffer - temp bytes
+  * @return digested hash
+*/
+
+var ripemd160 = function(buffer) {
+
+    var f = crypto.createHash("RIPEMD160");
+
+    var h = f.update(buffer);
+
+    return h.digest();
+
+};
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc aggregates all UTXO for particular address existing on chain
+  * @param string address - the address of the wallet to be fetched
+  * @return array - of all addresses UTXO
+*/
+
+function get_User_Wallet(address){
+  var total = [];
+
+  UTXO = {
+
+  };
+
+  var counter = 0;
+  //console.log(blockChain.blockchain);
+  try{
+    console.log("Scanning Wallet for Oodles...")
+  for(var j = 1; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].output.script[2] == address){
+        UTXO = {
+          block : j,
+          index : k,
+          amount : blockChain.blockchain[j].data.transaction_Pool[k].output.amount
+        };
+
+        total[counter] = UTXO;
+        UTXO = {};
+
+        counter++;
+      }
+    }
+    //if(blockChain.blockChain[i].data)
+  }
+
+  return total;
+
+  //var newWallet = new wallet(publicKey, privateKey);
+  //newWallet.walletAmount()
+
+}catch (e){
+  console.log("SERVER ERROR :: " + e);
+  return 0;
+}
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc aggregates all raw transactions for particular address on chain
+  * @param string address - the address of the wallet to be fetched
+  * @return array - of all raw transactions for particular address
+*/
+
+function get_User_Wallet_Transactions(address){
+  var wallet = [];
+
+  transaction = {
+
+  };
+
+  var counter = 0;
+  //console.log(blockChain.blockchain);
+  try{
+    console.log("Gathering wallet for :: " + address);
+  for(var j = 1; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].output.script[2] == address){
+        wallet[counter] = blockChain.blockchain[j].data.transaction_Pool[k];
+        counter++;
+      }
+    }
+    //if(blockChain.blockChain[i].data)
+  }
+
+  return wallet;
+
+  //var newWallet = new wallet(publicKey, privateKey);
+  //newWallet.walletAmount()
+
+}catch (e){
+  console.log("SERVER ERROR :: " + e);
+  return 0;
+}
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc toString() logs all UTXO for a particular address
+  * @param string address - the address of the Wallet to be logged
+  * @return array - of all addresses UTXO
+*/
+
+function get_User_Wallet_toString(address){
+  //console.log(blockChain.blockchain);
+  try{
+    console.log("Scanning Wallet for Oodles...")
+  for(var j = 1; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].output.script[2] == address){
+        UTXO = {
+          block : j,
+          index : k,
+          amount : blockChain.blockchain[j].data.transaction_Pool[k].output.amount
+        };
+
+        console.log(UTXO);
+      }
+    }
+    //if(blockChain.blockChain[i].data)
+  }
+
+  return;
+
+  //var newWallet = new wallet(publicKey, privateKey);
+  //newWallet.walletAmount()
+
+}catch (e){
+  console.log("SERVER ERROR :: " + e);
+  return 0;
+}
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc aggregates all UTXO for particular address to be spent in transaction
+  * @param object wallet - the wallet of oodles to be spent on a particular transaction
+  * @param number amount - the client stated amount of coin needed for particular transaction
+  * @return array - of all oodles to be spent
+*/
+
+function get_OODLE(wallet, amount){
+  var oodles = [];
+  var total = 0;
+  var j = 0;
+
+  for(var i = 0; i < wallet.length; i++){
+    if(wallet[i].amount >= amount){
+      return [wallet[i]];
+    }else{
+      total += wallet[i].amount;
+      oodles[j] = wallet[i];
+      j++;
+    }
+  }
+  if(total >= amount){
+    // ES5
+    oodles.sort((a, b) => (a.amount > b.amount) ? 1 : -1)
+    return oodles;
+  }
+  return 0;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc log entire chain history including all blocks and transactions
+  * @return
+*/
+function get_Chain_History(){
+  for(var j = 0; j < blockChain.blockchain.length; j++){
+    console.log("Block :: " + j);
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      console.log("   Index :: " + k + " Transaction :: " + JSON.stringify(blockChain.blockchain[j].data.transaction_Pool[k]));
+    }
+  }
+    return;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc get transaction by stated txid
+  * @param string txid - the txid to be searched
+  * @return bool | transaction - (success or failure) | (transaction of txid)
+*/
+
+function get_Transaction(txid){
+  for(var j = 0; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].input.txid == txid) return blockChain.blockchain[j].data.transaction_Pool[k];
+    }
+}
+  return false;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc log transaction by txid
+  * @param string txid - the txid of the transaction to be logged
+  * @return null
+*/
+
+function get_Transaction_toString(txid){
+  for(var j = 0; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].input.txid == txid) console.log(blockChain.blockchain[j].data.transaction_Pool[k]);
+    }
+  }
+
+  return;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc gets all transactions by version number
+  * @param string version - particular version of possible transactions on the chain to be searched
+  * @return transactions - of all matching versions on chain
+*/
+
+function get_Transaction_By_Version(version){
+
+  var transactions = [];
+  var curr = 0;
+
+  for(var j = 0; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].version == version){
+        transactions[count] = blockChain.blockchain[j].data.transaction_Pool[k];
+
+        curr++;
+      }
+    }
+  }
+
+  if(transactions != 0){
+    return transactions;
+  };
+  return 0;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc gets and logs all transactions by version number
+  * @param string version - particular version of possible transactions on the chain to be searched
+  * @return null
+*/
+
+function get_Transaction_By_Version_toString(version){
+
+  for(var j = 0; j < blockChain.blockchain.length; j++){
+    for(var k = 0; k < blockChain.blockchain[j].data.transaction_Pool.length; k++){
+      if(blockChain.blockchain[j].data.transaction_Pool[k].version == version){
+        console.log(blockChain.blockchain[j].data.transaction_Pool[k]);
+      }
+    }
+  }
+
+  return;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc gets all transactions by block and index
+  * @param number block - particular block of possible transactions on the chain to be searched
+  * @param number index - particular index of possible transactions on the chain to be searched
+  * @return transactions | null - (transactions with matching index)
+*/
+
+function get_Transaction_By_Index(block, index){
+  if(blockChain.blockchain[j].data.transaction_Pool[k] != 0){
+    return blockChain.blockchain[j].data.transaction_Pool[k];
+  }
+  return null;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc logs all retrieved transactions that match provided block and index
+  * @param number block - particular block of possible transactions on the chain to be searched
+  * @param number index - particular index of possible transactions on the chain to be searched
+*/
+
+function get_Transaction_By_Index_toString(block, index){
+  if(blockChain.blockchain[j].data.transaction_Pool[k] != 0){
+    console.log(blockChain.blockchain[j].data.transaction_Pool[k]);
+  }
+  return;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc Destroys UTXO used to fund a transaction. Also, logs details
+  * @param number funds - the UTXO to be used in a transaction
+  * @param number amount - the amount needed for a particular transaction
+  * @return bool - success or failure
+*/
+
+function destroy_OODLES(funds, amount){
+  var initial_amount = 0;
+  var new_amount = 0;
+
+  for(var i = 0; i < funds.length; i++){
+    initial_amount = blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount;
+
+    if(blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount - amount > 0){
+      blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount = blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount - amount;
+      new_amount = blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount;
+      amount = 0;
+    }else{
+      amount = amount - blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount;
+      blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].output.amount = 0;
+      new_amount = 0;
+    }
+    //console.log("Type " + typeof initial_amount + " init " + initial_amount + " newam " + new_amount);
+    if(initial_amount >= new_amount){
+      if(new_amount == 0){
+        console.log(chalk.yellow("Transaction :: " + blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].input.txid + " has been spent"));
+      }else{
+        console.log(chalk.yellow("Transaction :: " + blockChain.blockchain[funds[i].block].data.transaction_Pool[funds[i].index].input.txid + " has :: " + new_amount + " remaining oodle"));
+      }
+    }
+    if(amount == 0){
+      break;
+    }
+  }
+
+  return false;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc wrapper function
+  * @param object transaction - curr transaction in chain
+  * @param object previous_transaction - prev transaction in chain
+  * @param number index - curr index of curr transaction being validated
+  * @return bool - success or failure
+*/
+
+function validate_Transaction(transaction, previous_transaction, index){
+  return isValidated(transaction, previous_transaction, index);
+}
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc wrapper function // packages transaction for handling
+  * @param object client_Data - ...
+  * @param string count - ...
+  * @return new_Transaction
+*/
+//prepare transaction for delivery
+function _packageTransaction(client_Data, count){
+  var new_Transaction = {};//new transaction(Date.now(), count);
+  //new_Transaction.output(client_Data.amount, );
+
+  console.log(new_Transaction);
+
+  return new_Transaction;
+}
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc wrapper function // packages transaction for handling
+  * @param object client_Data - ...
+  * @param string count - ...
+  * @return new_Transaction
+*/
+//emit packaged transaction to nodes
+function emit_Transaction(new_Transaction){
+
+  clients.write(JSON.stringify(new_Transaction));
+
+}
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc wrapper function // checks users wallet for sufficient funds and logs them to the console
+  * @param string address - address involved in particular transaction
+  * @return  null
+*/
+function check_Sum_toString(address){
+  if(blockChain.blockchain.length > 0){
+    var totals = get_User_Wallet(address);
+
+    if(totals){
+      console.log("Found the following oodles under the address :: " + address);
+      for(var i = 0; i < totals.length; i++){
+        console.log("   " + JSON.stringify(totals[i]));
+      }
+    }else{
+      console.log("No oodles found for the address :: " + address);
+    }
+  }
+  return;
+}
+
+
+/**
+  * @version - v1.0.0
+  * @auth Joshua Richard
+  * @desc Adds a new transaction to the transaction pool in RAM for validation
+  * @param string transaction - curr transaction to be added to pool
+  * @return bool - success or failure
+*/
+
+function add_To_Pool(transaction){
+  //_packageTransaction(client_Data, count);
+
+  transaction_Pool[count] = transaction;
+
+  try{
+
+    if(transaction_Pool[count] == transaction){
+      console.log(chalk.green("Transaction :: " + JSON.stringify(transaction) + " added to TRANSACTION_POOL"));
+
+      count++;
+      return true;
+    }
+
+  }catch (e){
+
+    console.log(chalk.red("ERROR adding transaction to POOL :: " + e));
+
+  }
+
+  console.log(chalk.red("ERROR adding transaction to POOL"));
+  return false;
+}
+
+
+//*************************************************************************************************************************************
+// When client sends data to node
+//*************************************************************************************************************************************
+socket.on('data',function(client_Data){
+  var bread = socket.bytesRead;
+  var bwrite = socket.bytesWritten;
+
+  console.log('Bytes read : ' + bread);
+  console.log('Bytes written : ' + bwrite);
+  console.log('Data sent to server : ' + client_Data);
+
+console.log("Count " + count + " " + POOL_REQ);
+
+  //}else{
+
+    var user_input = JSON.parse(client_Data);
+
+    const protocol = user_input.protocol;
+    var wallet_Address = user_input.publicKey;
+
+    var      OP_ADD         = 0x93;
+
+    var      OP_DUP         = 0x76;
+
+    var      OP_HASH160     = 0xa9;
+
+    var      OP_EQUALVERIFY = 0x88;
+
+    var      OP_CHECKSIG    = 0xac;
+
+    var      OP_HALT        = 0x94;
+
+    switch (protocol) {
+      case 1: //CTO
+        var amount = user_input.amount;
+    		const pub_key = user_input.pub_key;
+
+        try{
+
+          amount = parseFloat(amount);
+
+        }catch (e){
+
+          console.log(chalk.red("ERROR :: expecting amount of type FLOAT, instead got typeof :: " + typeof amount));
+
+        }
+
+    		var new_Transaction = new transaction(Date.now(), count);
+
+    		try{
+
+    			var hash = new_Transaction.ripemd160(new_Transaction.sha256(pub_key));
+
+    		} catch (e){
+
+    			console.log('FAILED to Hash :: ' + e);
+
+    		}
+
+    		var pub_key_address = hash.toString('hex');
+
+
+    		var output_script = [OP_DUP, OP_HASH160, pub_key_address, OP_EQUALVERIFY, OP_CHECKSIG];
+
+        new_Transaction.input(count, []);
+    		new_Transaction.output(amount, output_script);
+
+    		console.log(pub_key + " :: " + JSON.stringify(new_Transaction));
+
+    		try{
+
+    	     add_To_Pool(new_Transaction);
+
+    		} catch (e){
+
+    			console.log("Send Transaction FAILED :: " + e);
+
+    		}
+
+        break;
+      case 2: //P2P
+        const public_key = user_input.pub_key;
+        const priv_key = user_input.priv_key;
+        var amounts = user_input.amount;
+        const dest_address = user_input.dest_address;
+
+        try{
+
+          amounts = parseFloat(amounts);
+
+        }catch (e){
+
+          console.log(chalk.red("ERROR :: expecting amount of type FLOAT, instead got typeof :: " + typeof amounts));
+
+        }
+
+        try{
+
+          var pub_hash = ripemd160(sha256(public_key));
+
+        } catch (e){
+
+          console.log('FAILED to Hash :: ' + e);
+
+        }
+
+        var pub_address_hash = pub_hash.toString('hex');
+        console.log(pub_hash.toString('hex'));
+
+        var payer_wallet = get_User_Wallet(pub_address_hash);
+
+        const OODLE = get_OODLE(payer_wallet, amounts);
+
+        if(OODLE != 0){
+          console.log("Oodle to be spent :: " + OODLE);
+
+          var funds_F_T = [];
+          console.log(OODLE);
+          for(var i = 0; i < OODLE.length; i++){
+            funds_F_T[i] = blockChain.blockchain[OODLE[i].block].data.transaction_Pool[OODLE[i].index];
+          }
+
+          var new_Transactions = new transaction(Date.now(), count);
+
+          try{
+
+      			//var pub_hash = new_Transactions.ripemd160(new_Transactions.sha256(dest_address));
+
+      		} catch (e){
+
+      			console.log('FAILED to Hash :: ' + e);
+
+      		}
+
+      		var pub_verify = pub_hash.toString('hex');
+
+
+      		var output_script = [OP_DUP, OP_HASH160, dest_address, OP_EQUALVERIFY, OP_CHECKSIG];
+
+
+
+          var pu_key = new Buffer.from(public_key, 'hex');
+          var pr_key = new Buffer.from(priv_key, 'hex');
+
+          var data = [OP_DUP, OP_HASH160, pub_address_hash, OP_EQUALVERIFY, OP_CHECKSIG];
+
+          var hashcode = sha256 (sha256 (new Buffer.from(data)));
+
+          var signature = ecdsa.sign(hashcode, pr_key);//.signature;
+
+
+        // We create a previous transaction with an output
+
+        // We skip other data that are not required for validation
+
+        var ver = ripemd160(sha256(public_key));
+        ver = ver.toString('hex');
+
+        var input_script = [signature, public_key];
+
+        new_Transactions.input(count, input_script);
+      	new_Transactions.output(amounts, output_script);
+
+
+      //	console.log(public_key + " :: " + JSON.stringify(new_Transactions));
+
+
+
+
+
+
+
+        var signatureDER = signature.toDER();
+
+        signatureDER = new Uint8Array(signatureDER);
+        signatureDER = secp256k1.signatureImport(signatureDER); // Decode a DER signature
+
+        console.log(ecdsa.verify(hashcode, signature, pu_key));
+        //console.log("ddedd" + ecdsa.verify(sha256 (sha256 (new Buffer.from("d"))), signature, pu_key));
+        //console.log("yo");
+
+      // We create a previous transaction with an output
+
+      // We skip other data that are not required for validation
+
+      //var privKe = "";
+      //var pubKe = "0321454dd740878e06f070f35ca238baa491d988e2749d3bf11c7b3e782c3e16b9";
+
+      console.log("pubkey    " + public_key)
+      var ver = ripemd160(sha256(public_key));
+      ver = ver.toString('hex');
+      console.log("ver   " + ver);
+
+
+
+
+
+
+      	try{
+          var bool = true;
+          //console.log("Trans" + transactions);
+          for(var i = 0; i < funds_F_T.length; i++){
+            if(validate_Transaction(new_Transactions, funds_F_T[i], 0)){
+
+            }else{
+              bool = false;
+              console.log("Transaction was INVALID");
+            }
+          }
+
+          if(bool){
+            if(add_To_Pool(new_Transactions)){
+              destroy_OODLES(OODLE, amounts);
+            }
+          }
+
+        } catch (e){
+
+          console.log("Validate Transaction FAILED :: " + e);
+
+      	}
+
+
+      }else if(Array.isArray(OODLE)){
+          //Insufficient Funds
+
+          console.log("Insufficient Funds");
+        }
+
+        break;
+      case 3: //MEM
+      //write entire history of chain to web client to display on webpage
+        socket.write(JSON.stringify(blockChain.blockchain));
+        console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+        break;
+      case 4: //WALLET
+      //give users aggregated wallet to the client
+        var wallet = get_User_Wallet_Transactions(ripemd160(sha256(wallet_Address)).toString('hex'));
+
+        wallet.sort((a, b) => (a.output.amount > b.output.amount) ? 1 : -1);
+
+        socket.write(JSON.stringify(wallet));
+        console.log("SERVER wrote Chain data to IP :: " + family + " port :: " + port);
+
+        break;
+      case 5: //RESET
+      //emmitted when node wins block
+
+        break;
+      case 6: //NEW
+      //EMMITTED when node joins network and/or new nodes are made known to other nodes on the network
+      default:
+        console.log("Invalid Protocol Provided");
+    }
+  /////}
+
+  if(count - 1  == POOL_REQ){
+    count = 0;
+
+    if (isMainThread) {
+      const worker = new Worker('./threads/thread.js');
+      worker.on("message", console.log);
+      worker.on("error", console.log);
+      worker.on("exit", console.log);
+
+      var messages = {
+        //protocol varies on curr situation
+        protocol: 3,
+        //intially set to false, subject to change
+        exit: false,
+        //contains any data that needs to be shared between the two
+        data: {
+          index: 3,
+          //could be full or null depending
+          transaction_Pool: 2//transaction_Pool
+        }
+      };
+
+      //convert to string
+      blockChain = JSON.stringify(typed);
+      //encode utf-8 to Uint8Array
+      var enc = new TextEncoder(); // always utf-8
+      typed = enc.encode(typed);
+
+      //convert to uint32 array type
+      typed = new Int32Array(typed);
+
+      //create shared buffer and allocate required bytes
+      const sharedBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * typed.length);
+      var arr = new Int32Array(sharedBuffer);
+
+      //instantiate a shared array buffer with a typed int32 array
+      //use text encoder to encode individual array elements to their utf8 values
+      //dynamically asign said utf8 values to typed array buffer
+
+      //for(var i = 0; i < typed.length; i++){
+        //arr[i] = enc.encode(typed[i]);
+      //}
+
+      //fill arr with array elements
+      for(var i = 0; i < typed.length; i++){
+        arr[i] = typed[i];
+      }
+
+    // logs:
+    // a[0] = 0
+    // a[1] = 1
+    // a[2] = 2
+    // a[3] = 3
+
+      //to retrieve values use text decoder to return to normal string types
+      //var dec = new TextDecoder("utf-8");
+      //var news = dec.decode(arr).split(" ");
+      //console.log(news);
+      //var temp = new Int32Array();
+      //temp = arr;
+      console.log(arr);
+      //arr = typed;
+      worker.postMessage({arr})
+      setTimeout(() => {
+        console.log("Worker is gonna be terminated");
+        // replace worker.terminate(); with something like
+        console.log("buff " +arr[0]);
+        console.log(arr);
+
+        worker.postMessage({ exit: true });
+        // maybe add another setTimeout with worker.terminate() just in case?
+      }, 5000);
+    } else {
+
+    }
+
+
+    index = index + 1;
+    transaction_Pool = [];
+
+    flag = true;
+  }
+
+  if(flag){
+    try{
+      for(var i = 0; i < blockChain.blockchain.length; i++){
+        console.log(chalk.green("\nBlock :: " + i + " " + JSON.stringify(blockChain.blockchain[i]) + "\n"));
+      }
+
+      console.log("Nodes Earned Coin :: " + newUser.coin);
+      socket.write(JSON.stringify(blockChain.blockchain));
+
+    }catch (exception){
+      console.log(exception);
+    }
+
+    //echo data
+    var is_kernel_buffer_full=true ;//= socket.write('Node : ' + server.address().port + ' successfully added Block :: ' + JSON.stringify(blockChain, null, 4));
+    if(is_kernel_buffer_full){
+      console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
+      flag = false;
+    }else{
+      socket.pause();
+    }
+}
+});
+
+socket.on('rand',function(data){
+  console.log("new data: " + data)
+});
+
+socket.on('drain',function(){
+  console.log('write buffer is empty now .. u can resume the writable stream');
+  socket.resume();
+});
+
+socket.on('error',function(error){
+  console.log('Error : ' + error);
+});
+
+socket.on('timeout',function(){
+  console.log('Socket timed out !');
+  socket.end('Timed out!');
+  // can call socket.destroy() here too.
+});
+
+socket.on('end',function(data){
+  console.log('Socket ended from other end!');
+  console.log('End data : ' + data);
+});
+
+socket.on('close',function(error){
+  var bread = socket.bytesRead;
+  var bwrite = socket.bytesWritten;
+  console.log('Bytes read : ' + bread);
+  console.log('Bytes written : ' + bwrite);
+  console.log('Socket closed!');
+  if(error){
+    console.log('Socket was closed coz of transmission error');
+  }
+});
+
+setTimeout(function(){
+  var isdestroyed = socket.destroyed;
+  console.log('Socket destroyed:' + isdestroyed);
+  socket.destroy();
+},1200000);
+
+});
+
+
+//
+//END CONNECT
+//
+
+
+
+
+// emits when any error occurs -> calls closed event immediately after this.
+server.on('error',function(error){
+  console.log('Error: ' + error);
+});
+
+//emits when server is bound with server.listen
+server.on('listening',function(){
+  console.log('Port :: ' + server.address().port);
+});
+
+server.maxConnections = 10;
+
+//static port allocation
+server.listen(2222);
+
+// for dyanmic port allocation
+//server.listen(function(){
+  //var address = server.address();
+  //var port = address.port;
+  //var family = address.family;
+  //var ipaddr = address.address;
+  //console.log('Server is listening at port' + port);
+  //console.log('Server ip :' + ipaddr);
+  //console.log(ipaddr);
+  //console.log('Server is IP4/IP6 : ' + family);
+//});
+
+
+
+var islistening = server.listening;
+
+if(islistening){
+  console.log(chalk.green('Server STATUS :: Listening'));
+}else{
+  console.log(chalk.red('Server STATUS :: Not Listening'));
+}
+
+setTimeout(function(){
+  server.close();
+},5000000);
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------
+
+
+
+
+
+
+const SHA256 = require("crypto-js/sha256");
+
+class Block {
+  constructor(index, data, precedingHash = " ") {
+    this.version = process.env.TOKEN_VERSION;
+    this.index = index;
+    this.timestamp = Date.now();
+    this.data = data;
+    this.precedingHash = precedingHash;
+    this.hash = this.computeHash();
+    this.nonce = 0;
+    this.coin = {
+      amount: 10,
+      owner: null,
+      date_created: Date.now()
+    };
+  }
+
+  computeHash() {
+    return SHA256(
+      this.index +
+        this.precedingHash +
+        this.timestamp +
+        JSON.stringify(this.data) +
+        this.nonce
+    ).toString();
+  }
+
+  proofOfWork(difficulty) {
+    var begin = Date.now();
+
+    console.log("\n--------Searching for Block---------")
+    var count = 0;
+    while (
+      this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
+    ) {
+      count = count + 1;
+      //console.log(this.hash.substring(0, 4) + "----" + Array(difficulty + 1).join("0"));
+      this.nonce++;
+      this.hash = this.computeHash();
+    }
+
+    var end = Date.now();
+    console.log("amount" + count);
+    console.log("Adding block ");
+    console.log("     Index :: " + this.index);
+    console.log("     Version :: " + this.version);
+    console.log("     Nonce :: " + this.nonce);
+    console.log("     Hash :: " + this.hash);
+    console.log("Elapsed Time: " + (end - begin) + " msec\n");
+  }
+}
+
+class Blockchain {
+  constructor() {
+    this.blockchain = [this.startGenesisBlock()];
+    this.difficulty = 4;
+  }
+  startGenesisBlock() {
+    return new Block(0, {transaction_Pool: []}, "0");
+  }
+
+  obtainLatestBlock() {
+    return this.blockchain[this.blockchain.length - 1];
+  }
+  addNewBlock(newBlock) {
+    newBlock.precedingHash = this.obtainLatestBlock().hash;
+    //newBlock.hash = newBlock.computeHash();
+    newBlock.proofOfWork(this.difficulty);
+    this.blockchain.push(newBlock);
+
+    return true;
+  }
+
+  checkChainValidity() {
+    for (let i = 1; i < this.blockchain.length; i++) {
+      const currentBlock = this.blockchain[i];
+      const precedingBlock = this.blockchain[i - 1];
+
+      if (currentBlock.hash !== currentBlock.computeHash()) {
+        return false;
+      }
+      if (currentBlock.precedingHash !== precedingBlock.hash) return false;
+    }
+    return true;
+  }
+}
+
+module.exports = Blockchain;

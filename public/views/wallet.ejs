@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JoshCoin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/transaction',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="You are regestered,You can login now.") {
+                    console.log("wooo");
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+    $(document).ready(function(){
+$(":input").inputmask();
+
+
+
+$("#phone").inputmask({
+mask: '999 999 9999',
+placeholder: ' ',
+showMaskOnHover: false,
+showMaskOnFocus: false,
+onBeforePaste: function (pastedValue, opts) {
+var processedValue = pastedValue;
+
+//do something with it
+
+return processedValue;
+}
+});
+});
+btn.addEventListener('click', function(){
+    socket.emit('chat',{
+        message: message.value,
+        handle: handle.value
+    });
+});
+  </script>
+  <style>
+  body{
+    height: 100%;
+    font-family: ;/*courier garamond candara*/
+  }
+  .fa {
+  padding: 20px;
+  font-size: 24px;
+  width: ;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+  color: black;
+}
+.alignleft {
+    float: left;
+    margin-right: 15px;
+}
+.alignright {
+    float: right;
+    margin-left: 15px;
+}
+.aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+}
+a:focus { outline: 0 solid }
+img {
+    max-width: 100%;
+    height: auto;
+}
+.fix { overflow: hidden }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+html,
+body { height: 100% }
+
+a {
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    color: #333;
+}
+a:hover { text-decoration: none }
+
+
+
+.search-box{margin:80px auto;position:absolute;}
+.caption{margin-bottom:50px;}
+.loginForm input[type=text], .loginForm input[type=password]{
+  margin-bottom:10px;
+}
+.loginForm input[type=submit]{
+  background:#fb044a;
+  color:#fff;
+  font-weight:700;
+
+}
+
+/*
+body {
+    padding: 2.5em 2em 0em;
+    background: #f5f7f9;
+        font-size: 1.5em;
+        color: #346;
+        font-family: Signika, -apple-system, sans-serif;
+}*/
+  </style>
+</head>
+<body>
+      <%- header %>
+
+
+    <div class="container-fluid" style="height: 100%;">
+      <div class="row" style="height: 100%;">
+        <nav class="col-md-2 d-none d-md-block sidebar" style="height: 100%">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="home"></span>
+                  Dashboard <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file"></span>
+                  Orders
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="shopping-cart"></span>
+                  Products
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="users"></span>
+                  Customers
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                  Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="layers"></span>
+                  Integrations
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Saved reports</span>
+              <a class="d-flex align-items-center text-muted" href="#">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Current month
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Last quarter
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Payed
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Received
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button type="button" class="btn btn-outline-secondary">Search</button>
+              <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Separated link</a>
+              </div>
+            </div>
+            <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+          </div>
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow" style="width: 100%;">
+              <h1 class="mr-3" style="color: white">OC</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+              <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100">Wallet</h6>
+                <small>Since 2020</small>
+              </div>
+              <div class="col-sm-9">
+              </div>
+              <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 0px">
+                <div class="btn-group mr-2" style="float: right;">
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Share</button>
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Export</button>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" style="color: white">
+                  <span data-feather="calendar"></span>
+                  This week
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!--<canvas class="my-4" id="myChart" width="900" height="380"></canvas>-->
+
+          <h2>Recent Transactions</h2>
+          <div class="table-responsive">
+            <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col-sm-2">Date</th>
+      <th scope="col-sm-4"></th>
+      <th scope="col-sm-2">Amount</th>
+      <th scope="col-sm-4">Hash</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(var i=0; i < blocks.length; i++) { %>
+    <tr>
+      <td><% var date = new Date(blocks[i].lock_time * 1000); %>
+
+      <% var hours = date.getHours(); %>
+
+      <% var minutes = "0" + date.getMinutes(); %>
+
+      <% var seconds = "0" + date.getSeconds(); %>
+
+      <% var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2); %>
+              <%= formattedTime %></td>
+      <td></td>
+      <td><%= blocks[i].output.amount %></td>
+      <td><%= blocks[i].input.txid %></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+          </div>
+        </main>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <!-- Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script>
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          datasets: [{
+            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          },
+          legend: {
+            display: false,
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

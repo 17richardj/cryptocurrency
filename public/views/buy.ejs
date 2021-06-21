@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JoshCoin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/buys',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="You are regestered,You can login now.") {
+                    console.log("wooo");
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+    </script>
+    <style>
+      body{
+        height: 100%;
+        font-family: ;/*courier garamond candara*/
+      }
+      .fa {
+      padding: 20px;
+      font-size: 24px;
+      width: ;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 50%;
+      color: black;
+    }
+    .alignleft {
+        float: left;
+        margin-right: 15px;
+    }
+    .alignright {
+        float: right;
+        margin-left: 15px;
+    }
+    .aligncenter {
+        display: block;
+        margin: 0 auto 15px;
+    }
+    a:focus { outline: 0 solid }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    .fix { overflow: hidden }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 0 0 15px;
+        font-weight: 700;
+    }
+    html,
+    body { height: 100% }
+
+    a {
+        -moz-transition: 0.3s;
+        -o-transition: 0.3s;
+        -webkit-transition: 0.3s;
+        transition: 0.3s;
+        color: #333;
+    }
+    a:hover { text-decoration: none }
+
+
+
+    .search-box{margin:80px auto;position:absolute;}
+    .caption{margin-bottom:50px;}
+    .loginForm input[type=text], .loginForm input[type=password]{
+      margin-bottom:10px;
+    }
+    .loginForm input[type=submit]{
+      background:#fb044a;
+      color:#fff;
+      font-weight:700;
+
+    }
+
+    /*
+    body {
+        padding: 2.5em 2em 0em;
+        background: #f5f7f9;
+            font-size: 1.5em;
+            color: #346;
+            font-family: Signika, -apple-system, sans-serif;
+    }*/
+      </style>
+    </head>
+    <body>
+      <%- header %>
+        <div class="container ">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow" style="width: 100%;">
+              <h1 class="mr-3" style="color: white">OC</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+              <div class="lh-100">
+                <h6 class="mb-0 text-white lh-100">Wallet</h6>
+                <small>Since 2020</small>
+              </div>
+              <div class="col-sm-7">
+              </div>
+              <div class="btn-toolbar mb-2 mb-md-0" style="margin-right: 0px">
+                <div class="btn-group mr-2" style="float: right;">
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Share</button>
+                  <button class="btn btn-sm btn-outline-secondary" style="color: white">Export</button>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" style="color: white">
+                  <span data-feather="calendar"></span>
+                  This week
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!--
+            <div class="col-md-4 order-md-2 mb-4">
+</div>-->
+
+<div class="col-md-8 order-md-1 rounded box-shadow mx-auto">
+  <h4 class="mb-3">Billing address</h4>
+  <form id="andfksa" class="needs-validation">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="firstName">First name</label>
+        <input type="text" class="form-control" id="firstName" placeholder="John" value="" required>
+        <div class="invalid-feedback">
+          Valid first name is required.
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="lastName">Last name</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Doe" value="" required>
+        <div class="invalid-feedback">
+          Valid last name is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="username">Username</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">@</span>
+        </div>
+        <input type="text" class="form-control" id="username" placeholder="Username" required>
+        <div class="invalid-feedback" style="width: 100%;">
+          Your username is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email">Email <span class="text-muted">(Optional)</span></label>
+      <input type="email" class="form-control" id="email" placeholder="you@example.com">
+      <div class="invalid-feedback">
+        Please enter a valid email address for shipping updates.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address">Address</label>
+      <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+      <div class="invalid-feedback">
+        Please enter your shipping address.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+      <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+    </div>
+
+    <div class="row">
+      <div class="col-md-5 mb-3">
+        <label for="country">Country</label>
+        <select class="custom-select d-block w-100" id="country" required>
+          <option value="">Choose...</option>
+          <option>United States</option>
+        </select>
+        <div class="invalid-feedback">
+          Please select a valid country.
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="state">State</label>
+        <select class="custom-select d-block w-100" id="state" required>
+          <option value="">Choose...</option>
+          <option>California</option>
+        </select>
+        <div class="invalid-feedback">
+          Please provide a valid state.
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label for="zip">Zip</label>
+        <input type="text" class="form-control" id="zip" placeholder="" required>
+        <div class="invalid-feedback">
+          Zip code required.
+        </div>
+      </div>
+    </div>
+    <hr class="mb-4">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="same-address">
+      <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="save-info">
+      <label class="custom-control-label" for="save-info">Save this information for next time</label>
+    </div>
+    <hr class="mb-4">
+
+    <h4 class="mb-3">Payment</h4>
+
+    <div class="d-block my-3">
+      <div class="custom-control custom-radio">
+        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+        <label class="custom-control-label" for="credit">Credit card</label>
+      </div>
+      <div class="custom-control custom-radio">
+        <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+        <label class="custom-control-label" for="debit">Debit card</label>
+      </div>
+      <div class="custom-control custom-radio">
+        <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+        <label class="custom-control-label" for="paypal">Paypal</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="cc-name">Name on card</label>
+        <input type="text" class="form-control" id="cc-name" placeholder="" required>
+        <small class="text-muted">Full name as displayed on card</small>
+        <div class="invalid-feedback">
+          Name on card is required
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="cc-number">Credit card number</label>
+        <input type="text" class="form-control" id="cc-number" placeholder="" required>
+        <div class="invalid-feedback">
+          Credit card number is required
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <label for="cc-expiration">Expiration</label>
+        <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+        <div class="invalid-feedback">
+          Expiration date required
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label for="cc-expiration">CVV</label>
+        <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+        <div class="invalid-feedback">
+          Security code required
+        </div>
+      </div>
+    </div>
+    <hr class="mb-4">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-dark btn-lg btn-block" data-toggle="modal" data-target="#exampleModalCenter">Continue to Checkout</button>
+  </form>
+</div>
+</div>
+
+<div id="LangTable"><a href="/buy" id="aa"></a>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Purchase <small>Oodle</small></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form1" method="post" class="needs-validation h-100" oninput='pwdConf.setCustomValidity(password.value != pwdConf.value ? "Passwords do not match." : "")'>
+          <div class="form-group">
+            <label for="email">Buy for:</label>
+            <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 0280fc8670b24f3..." name="pub_key" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+            <label for="email">Amount:</label>
+            <input style="width: 25%" type="number" step="0.00001" class="form-control" id="uname" minLength="1" maxlength="10" placeholder="ex: 1.05" name="amount" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div class="form-group form-check">
+            <div class="col-md- mx-auto">
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+          <button type="submit" value="Login" class="btn btn-dark">Send</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="my-5 pt-5 text-muted text-center text-small">
+<p class="mb-1">&copy; 2020 JoshCoin LLC.s</p>
+<ul class="list-inline">
+  <li class="list-inline-item"><a href="#">Privacy</a></li>
+  <li class="list-inline-item"><a href="#">Terms</a></li>
+  <li class="list-inline-item"><a href="#">Support</a></li>
+</ul>
+</footer>
+</div>
+</body>
+</html>

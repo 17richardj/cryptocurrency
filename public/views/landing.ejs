@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>JoshCoin</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='https://code.jquery.com/jquery-1.11.0.js'></script>
+  <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $( "#form1" ).submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/transaction',
+          data: $('#form1').serialize(),
+          dataType: "json",
+          success: function(response){
+            //alert("a");
+            //console.log(response.Success);
+            $('#form1')[0].reset();
+            document.getElementById("check").innerHTML=response.Success;
+                  //ADD THIS CODE
+                  setTimeout(function(){
+                    document.getElementById("check").innerHTML="";
+                  },3000);
+                  if (response.Success=="You are regestered,You can login now.") {
+                    console.log("wooo");
+                    document.getElementById("aa").click();
+                  };
+                },
+                error: function() {
+                }
+              })
+      });
+    });
+    $(document).ready(function(){
+$(":input").inputmask();
+
+
+
+$("#phone").inputmask({
+mask: '999 999 9999',
+placeholder: ' ',
+showMaskOnHover: false,
+showMaskOnFocus: false,
+onBeforePaste: function (pastedValue, opts) {
+var processedValue = pastedValue;
+
+//do something with it
+
+return processedValue;
+}
+});
+});
+btn.addEventListener('click', function(){
+    socket.emit('chat',{
+        message: message.value,
+        handle: handle.value
+    });
+});
+  </script>
+  <style>
+  body{
+    height: 100%;
+    font-family: ;/*courier garamond candara*/
+  }
+  .fa {
+  padding: 20px;
+  font-size: 24px;
+  width: ;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50%;
+  color: black;
+}
+.alignleft {
+    float: left;
+    margin-right: 15px;
+}
+.alignright {
+    float: right;
+    margin-left: 15px;
+}
+.aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+}
+a:focus { outline: 0 solid }
+img {
+    max-width: 100%;
+    height: auto;
+}
+.fix { overflow: hidden }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px;
+    font-weight: 700;
+}
+html,
+body { height: 100% }
+
+a {
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    color: #333;
+}
+a:hover { text-decoration: none }
+
+
+
+.search-box{margin:80px auto;position:absolute;}
+.caption{margin-bottom:50px;}
+.loginForm input[type=text], .loginForm input[type=password]{
+  margin-bottom:10px;
+}
+.loginForm input[type=submit]{
+  background:#fb044a;
+  color:#fff;
+  font-weight:700;
+
+}
+
+/*
+body {
+    padding: 2.5em 2em 0em;
+    background: #f5f7f9;
+        font-size: 1.5em;
+        color: #346;
+        font-family: Signika, -apple-system, sans-serif;
+}*/
+  </style>
+</head>
+<body>
+        <%- header %>
+
+
+  <div class="container h-100 col-sm-8" style="margin-top: 3%">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+      <h1 class="mr-3" style="color: white">Oodle</h1><!--<img class="mr-3" src="https://images-platform.99static.com/S2Jnw62fQWtPYn9LGC3yJy1izNs=/500x500/top/smart/99designs-contests-attachments/29/29553/attachment_29553655" alt="" width="48" height="48">-->
+      <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100">OodleCoin</h6>
+        <small>Since 2020</small>
+      </div>
+    </div>
+    <div class="wrapper col-sm-10">
+      <form id="form1" method="post" class="needs-validation h-100" oninput='pwdConf.setCustomValidity(password.value != pwdConf.value ? "Passwords do not match." : "")'>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-10">
+          <label for="email">Sender:</label>
+          <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 0280fc8670b24f3..." name="pub_key" required>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+          <p></p>
+          <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 15sJ9187WoRaLiDusQrcf..." name="priv_key" required>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="col-sm-2">
+          <label for="email">Amount:</label>
+          <input type="number" step="0.00001" class="form-control" id="uname" minLength="0" maxlength="5" placeholder="0" name="amount" required>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="email">Recipient:</label>
+        <input type="text" class="form-control" id="uname" minLength="4" maxlength="100" placeholder="ex: 0280fc8670b24f3..." name="dest_address" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+        <div class="form-group form-check">
+        <div class="row">
+          <div class="col-md- float-right mx-auto">
+                        <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#exampleModalCenter">Send</button>
+      </div>
+      </div>
+      </form>
+    </div>
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">
+        <hr class="w-25">
+        <div class="footer-copyright text-center py-3">Not a user yet? <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><em>Generate</em></a>
+        </div>
+      </div>
+      <!-- Copyright -->
+
+      <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content modal-lg">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Your User Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body modal-lg">
+              <form>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Private Key:</label>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <p id="privKey"><em><%= privateKey %></em></p>
+                </div>
+                <div class="col">
+                  <i class="fa fa-copy"  id="button1" onclick="CopyToClipboard('privKey');return false;"></i>
+                </div>
+              </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Public Key:</label>
+                  <p id="pubKey"><em><%= publicKey %></em></p>
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Public Address:</label>
+                  <p id="address"><em><%= address %></em></p>
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Current Jcoin Amount:</label>
+                  <p><em><%= amount %></em></p>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+</div>
+  		<div>
+  		</div>
+  		<div id="LangTable"><a href="/landing" id="aa"></a>
+  		</div>
+    </div>
+    <script>
+    function CopyToClipboard(id)
+    {
+    var r = document.createRange();
+    r.selectNode(document.getElementById(id));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(r);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    }
+    </script>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small cyan darken-3">
+
+    </footer>
+    <!-- Footer -->
+</body>
+</html>
