@@ -1,9 +1,7 @@
 //****************************************************************************************************************************
 //@version - v1.0.0
-//@auth Joshua Richard
 //@file thread.js
 //@descr compartmentalized ejs objects to be served to views. Improves readability and makes it easier to make changes across the site.
-//@Copyright (C) joshua Richard, 2019-2020. All rights reserved.
 //****************************************************************************************************************************
 
 const SHA256 = require("crypto-js/sha256");
@@ -35,7 +33,6 @@ class Block {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -53,7 +50,6 @@ class Block {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -87,7 +83,6 @@ class Block {
 class Blockchain {
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -100,7 +95,6 @@ class Blockchain {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -112,7 +106,6 @@ class Blockchain {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -124,7 +117,6 @@ class Blockchain {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte

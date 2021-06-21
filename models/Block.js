@@ -1,9 +1,7 @@
 //****************************************************************************************************************************
 //@version - v1.0.0
-//@auth Joshua Richard
 //@file interpreter.js
 //@descr stack based compiler and interpreter meant to read and process script commands embedded in the Oodle coin network
-//@Copyright (C) joshua Richard, 2019-2020. All rights reserved.
 //****************************************************************************************************************************
 
 const SHA256 = require("crypto-js/sha256");
@@ -13,7 +11,6 @@ class Block {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -36,7 +33,6 @@ class Block {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
@@ -54,12 +50,11 @@ class Block {
 
   /**
     * @version - v1.0.0
-    * @auth Joshua Richard
     * @desc generate private key using elliptic curve cryptogrophy
     * @param : null
     * @return bytes - raw byte
   */
-  
+
   proofOfWork(difficulty) {
     var begin = Date.now();
     var count = 0;
